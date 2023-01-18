@@ -9,7 +9,7 @@ reddit = praw2(
     # ID pour s'identifier en tant que Bot sur Reddit
     client_id = pwrd.reddit_id,
     client_secret = pwrd.reddit_secret,
-    user_agent = "discord.py:Nekobot:v1.1.0(by u/tintin361yt)",
+    user_agent = "discord.py:Nekobot:v1.4.3(by u/tintin361yt)",
     # ID du compte Reddit
     username = "Kirlia-chan",
     password = pwrd.reddit_password,
@@ -22,54 +22,62 @@ class FromReddit(commands.Cog):
         self.bot = bot
     
     @commands.command(name="nekomimi", aliases=['Nekomimi'])
-    async def nekomimi(self, ctx):
+    async def nekomimi(self, ctx, num=1):
         await ctx.message.delete()
         # Petit message d'attente
         search_msg = await ctx.send("<a:search:944484192018903060> Recherche sur Reddit en cours...")
         
-        try:
-            message = get_post("Nekomimi")
-            await ctx.send(embed=message)
-        except:
-            await search_msg.edit(content="Erreur: la commande à plantée.")
-            return
+        for _ in range(num):
+            try:
+                message = get_post("Nekomimi")
+                result = await ctx.send(embed=message)
+                await result.add_reaction("📝")
+            except:
+                await search_msg.edit(content="Erreur: la commande à plantée.")
         await search_msg.delete()
         
         
     @commands.command(name="nekohentai", aliases=["Nekohentai", "nekoHentai", "NekoHentai"])
-    async def nekohentai(self, ctx):
+    async def nekohentai(self, ctx, num=1):
         await ctx.message.delete()
         # Petit message d'attente
         search_msg = await ctx.send("<a:search:944484192018903060> Recherche sur Reddit en cours...")
         
-        try:
-            message = get_post("Nekohentai")
-            await ctx.send(embed=message)
-        except:
-            await search_msg.edit(content="Erreur: la commande à plantée.")
-            return
+        for _ in range(num):
+            try:
+                message = get_post("Nekohentai")
+                result = await ctx.send(embed=message)
+                await result.add_reaction("📝")
+            except:
+                await search_msg.edit(content="Erreur: la commande à plantée.")
         await search_msg.delete()
     
     
     @commands.command(name="Nekopara", aliases=["nekopara"])
-    async def nekopara(self, ctx):
+    async def nekopara(self, ctx, num=1):
         await ctx.message.delete()
         # Petit message d'attente
         search_msg = await ctx.send("<a:search:944484192018903060> Recherche sur Reddit en cours...")
         
-        try:
-            message = get_post("nekoparansfw")
-            await ctx.send(embed=message)
-        except:
-            await search_msg.edit(content="Erreur: la commande à plantée.")
-            return
+        for _ in range(num):
+            try:
+                message = get_post("nekoparansfw")
+                result = await ctx.send(embed=message)
+                await result.add_reaction("📝")
+            except:
+                await search_msg.edit(content="Erreur: la commande à plantée.")
         await search_msg.delete()
+        
+    @commands.command(name="helpReddit", aliases=["helpreddit"])
+    async def aideReddit(self, ctx):
+        await ctx.message.delete()
+        await ctx.send(embed=get_help())
 
 
 def get_post(sub: str) -> Embed:
     subreddit = reddit.subreddit(sub)
     
-    neko_list = list(subreddit.hot(limit=200))
+    neko_list = list(subreddit.hot(limit=700))
     submission = choice(neko_list)
     color = 0xFF5700
             
@@ -83,7 +91,17 @@ def get_post(sub: str) -> Embed:
         
         
     return message
+
+
+def get_help():
+    message = Embed(title="<:reddit:794069835138596886> Liste des commandes pour Reddit", color=0xFF5700)
+    
+    message.add_field(name="^^nekomimi", value="Affiche un post depuis r/nekomimi.", inline=True)
+    message.add_field(name="^^nekohentai", value="Affiche un post depuis r/nekohentai.", inline=True)
+    message.add_field(name="^^nekopara", value="Affiche un post depuis r/nekopara.", inline=True)
+    
+    return message
         
 
-def setup(bot):
-    bot.add_cog(FromReddit(bot))
+async def setup(bot):
+    await bot.add_cog(FromReddit(bot))

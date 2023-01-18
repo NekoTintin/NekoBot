@@ -7,46 +7,28 @@ from pybooru import Danbooru
 
 dan = Danbooru('danbooru', username="Kiri-chan27", api_key=pswd.danbooru_api)
 
-class Xenoblade(commands.Cog):
+class Princess_connect(commands.Cog):
     
     def __init__(self, bot) -> None:
         self.bot = bot
         
-    @commands.command(name="nia", aliases=["Nia"])
-    async def nia(self, ctx, num=1, tag=""):
+    @commands.command(name="kiaru", aliases=["Kiaru"])
+    async def kiaru(self, ctx, num=1, tag=""):
         await ctx.message.delete()
         # Petit message d'attente
         search_msg = await ctx.send("<a:search:944484192018903060> Recherche en cours...")
-        
-        size = 13 + len(tag)
-        for _ in range (num):
+        size = 21 + len(tag)
+        for _ in range(num):
             try:
-                message = from_danbooru(f"nia_(xenoblade) {tag}", size)
+                message = from_danbooru(f"karyl_(princess_connect!) {tag}", size)
                 result = await ctx.send(embed=message)
                 await result.add_reaction("📝")
             except:
                 await search_msg.edit(content="Erreur: la commande à plantée.")
         await search_msg.delete()
         
-        
-    @commands.command(name="mio", aliases=["Mio"])
-    async def mio(self, ctx, num=1, tag=""):
-        await ctx.message.delete()
-        # Petit message d'attente
-        search_msg = await ctx.send("<a:search:944484192018903060> Recherche en cours...")
-
-        size = 13 + len(tag)
-        for _ in range (num):
-            try:
-                message = from_danbooru(f"mio_(xenoblade) {tag}", size)
-                result = await ctx.send(embed=message)
-                await result.add_reaction("📝")
-            except:
-                await search_msg.edit(content="Erreur: la commande à plantée.")
-        await search_msg.delete()
-        
-    @commands.command(name="helpxenoblade", aliases=["helpXenoblade"])
-    async def aideXeno(self, ctx):
+    @commands.command(name="helpprinconn", aliases=["helpPrinConn", "helpPrinconn"])
+    async def aidePrinconn(self, ctx):
         await ctx.message.delete()
         await ctx.send(embed=get_help())
         
@@ -69,13 +51,12 @@ def from_danbooru(tag: str, size: int) -> Embed:
     return message
 
 def get_help():
-    message = Embed(title="<:Xenoblade:987708829624070215> Liste des commandes Xenoblade", color=0xFF5700)
+    message = Embed(title="<:Princess_Connect:990382542102335528> Liste des commandes pour Princess Connect", color=0xFF5700)
     
-    message.add_field(name="^^nia [tag]", value="Affiche une image de Nia.", inline=True)
-    message.add_field(name="^^mio [tag]", value="Affiche une image de Mio.", inline=True)
+    message.add_field(name="^^kiaru [tag]", value="Affiche une image de Kiaru.", inline=True)
     
     return message
         
 
 async def setup(bot):
-    await bot.add_cog(Xenoblade(bot))
+    await bot.add_cog(Princess_connect(bot))

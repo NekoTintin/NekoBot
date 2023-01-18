@@ -7,9 +7,6 @@
 __pycache__
 cogs/__pycache__
 
-# Mattermost
-mattermost
-
 # temporary files which can be created if a process still has a handle open of a deleted file
 .fuse_hidden*
 
@@ -48,3 +45,6 @@ mattermost
 
 # Custom rules (everything added below won't be overriden by 'Generate .gitignore File' if you use 'Update' option)
 passwords.py
+data
+data/*
+.gitignore

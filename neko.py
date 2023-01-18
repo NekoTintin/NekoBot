@@ -1,15 +1,21 @@
 import os
 
 from discord.ext import commands
+import discord
+import asyncio
+import var
 
 import passwords
 
-version = "1.1.0"
-online_message = "It's about girls, it's about neko !"
+version = var.version
+online_message = var.online_message
 # Dictionnaire qui stocke les cogs chargés
 loaded_ext = dict()
 
-bot = commands.Bot(command_prefix="^^", help_command=None)
+# Charge les intents par défaut
+intents = discord.Intents.default()
+intents.message_content = True
+bot = commands.Bot(command_prefix="^^", help_command=None, intents=intents)
 
 # Fonction pour obtenir les modules chargés
 def get_modules() -> list():
@@ -19,39 +25,15 @@ def get_modules() -> list():
             l.append(filename)
     return l
 
-@bot.command(name="modules", aliases=['mod'])
-async def modules(ctx):
-    message = f"Liste des modules chargés:\n"
-    for mod in get_modules():
-        message += f"- *{mod}*\n"
-    await ctx.send(message)
 
-
-# Permet de charger un module (Cog) dans ./cogs/
+        
 @bot.command()
-async def load(ctx, extensions):
-    await ctx.message.delete()
-    bot.load_extension(f'cogs.{extensions}')
-    loaded_ext[extensions] = True
+async def startup(bot):
+    async with bot:
+        for filename in os.listdir('/home/Tintin/discord_bot/NekoBot/cogs'):
+            if filename.endswith(".py") and filename != "reactions.py":
+                await bot.load_extension(f'cogs.{filename[:-3]}')
+        await bot.start(passwords.token)
 
-# Permet de décharger un module (Cog) dans ./cogs/ 
-@bot.command()
-async def unload(ctx, extensions):
-    await ctx.message.delete()
-    bot.unload_extension(f'cogs.{extensions}')
-    loaded_ext[extensions] = False
-    
-# Permet de recharger un module (Cog) dans ./cogs/ 
-@bot.command()
-async def reload(ctx, extensions):
-    await ctx.message.delete()
-    bot.unload_extension(f'cogs.{extensions}')
-    loaded_ext[extensions] = False
-    bot.load_extension(f'cogs.{extensions}')
-    loaded_ext[extensions] = True
-
-for filename in os.listdir('/home/Tintin/Desktop/NekoBot/cogs'):
-    if filename.endswith(".py"):
-        bot.load_extension(f'cogs.{filename[:-3]}')
-
-bot.run(passwords.token)
+# Démarre le bot
+asyncio.run(startup(bot))

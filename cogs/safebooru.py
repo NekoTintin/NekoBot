@@ -14,18 +14,24 @@ class Safebooru(commands.Cog):
         self.bot = bot
     
     @commands.command(name="safeNeko", aliases=["safeneko"])
-    async def random_neko(self, ctx):
+    async def random_neko(self, ctx, num=1, tag=""):
         await ctx.message.delete()
         # Petit message d'attente
         search_msg = await ctx.send("<a:search:944484192018903060> Recherche sur Safebooru en cours...")
-            
-        try:
-            message = from_danbooru("cat_girl", 1)
-            await ctx.send(embed=message)
-        except:
-            await search_msg.edit(content="Erreur: la commande à plantée.")
-            return
+        
+        for _ in range(num):
+            try:
+                message = from_danbooru(f"cat_girl {tag}", 3000)
+                result = await ctx.send(embed=message)
+                await result.add_reaction("📝")
+            except:
+                await search_msg.edit(content="Erreur: la commande à plantée.")
         await search_msg.delete()
+        
+    @commands.command(name="helpSafebooru", aliases=["helpsafebooru"])
+    async def aideSafebooru(self, ctx):
+        await ctx.message.delete()
+        await ctx.send(embed=get_help())
         
 
 def from_danbooru(tag: str, limit: int) -> Embed:
@@ -43,6 +49,14 @@ def from_danbooru(tag: str, limit: int) -> Embed:
     
     
     return message
+
+
+def get_help():
+    message = Embed(title="<:Safebooru:987708780026417212> Liste des commandes pour Safebooru", color=0x00314D)
+    
+    message.add_field(name="^^safeneko [nombre d'images] [tag]", value="Affiche la dernière image sur Safebooru.", inline=True)
+    
+    return message
             
-def setup(bot):
-    bot.add_cog(Safebooru(bot))
+async def setup(bot):
+    await bot.add_cog(Safebooru(bot))
