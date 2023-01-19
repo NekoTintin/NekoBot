@@ -27,19 +27,21 @@ class Buttons(discord.ui.View):
         except:
             message = await interaction.response.send_message("❌ Impossible de l'ajouter à la liste...", delete_after=30)
         
-    @discord.ui.button(label="Une autre !", style=discord.ButtonStyle.danger, emoji="🔁", disabled=True)
+    @discord.ui.button(label="Une autre !", style=discord.ButtonStyle.danger, emoji="🔁")
     async def repeat(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.message.delete()
         
         if interaction.channel_id == 986006452848169041:
-            image = choice(self.safe.post_list(tags="cat_girl", limit=10000))
+            safe = Danbooru('safebooru', username="Kiri-chan27", api_key=pswd.danbooru_api)
+            image = choice(safe.post_list(tags="cat_girl -furry", limit=10000))
         else:
-            image = choice(self.dan.post_list(tags="cat_girl nude", limit=10000))
+            dan = Danbooru('danbooru', username="Kiri-chan27", api_key=pswd.danbooru_api)
+            image = choice(dan.post_list(tags="cat_girl nude", limit=10000))
         
         channel = interaction.channel
         
         message = Embed(title=choice(var.titles_possibilities), description=choice(var.message_possibilities), color=0xFF5700)
-        message.set_footer(text="Depuis Danbooru - ID: {image['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=200&v=4")
+        message.set_footer(text=f"Depuis Danbooru - ID: {image['id']}", icon_url="https://danbooru.donmai.us/packs/static/images/danbooru-logo-128x128-ea111b6658173e847734.png")
         message.set_image(url=image['file_url'])
         
         view = Buttons()
@@ -55,22 +57,23 @@ class Dailyneko(commands.Cog):
         self.dan = Danbooru('danbooru', username="Kiri-chan27", api_key=pswd.danbooru_api)
         
         bot.loop.create_task(self.neko())
-        #bot.loop.create_task(self.nekonsfw())
+        bot.loop.create_task(self.nekonsfw())
         
     async def neko(self):
         # Attends que le bot soit prêt
         await self.bot.wait_until_ready()
-        now = dt.datetime.now(IST)
         channel = self.bot.get_channel(986006452848169041)
         
-        image = choice(self.safe.post_list(tags="cat_girl", limit=10000))
-        
-        message = Embed(title=choice(var.titles_possibilities), description=choice(var.message_possibilities), color=0xFF5700)
-        message.set_footer(text="Depuis Danbooru - ID: {image['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=200&v=4")
-        message.set_image(url=image['file_url'])
-        
         while not self.bot.is_closed():
+            now = dt.datetime.now(IST)
+            
             if now.hour == 12 or now.hour == 23:
+                image = choice(self.safe.post_list(tags="cat_girl -furry", limit=10000))
+        
+                message = Embed(title=choice(var.titles_possibilities), description=choice(var.message_possibilities), color=0xFF5700)
+                message.set_footer(text=f"Depuis Safebooru - ID: {image['id']}", icon_url="https://safebooru.org/favicon.ico")
+                message.set_image(url=image['file_url'])
+            
                 view = Buttons()
                 view.add_item(discord.ui.Button(label="Lien vers l'image", style=discord.ButtonStyle.link, url=image['file_url']))
                 
@@ -79,18 +82,19 @@ class Dailyneko(commands.Cog):
 
     async def nekonsfw(self):
         await self.bot.wait_until_ready()
-        now = dt.datetime.now(IST)
         channel = self.bot.get_channel(1015743434331521044)
         
-        image = choice(self.dan.post_list(tags="cat_girl nude", limit=10000))
-            
-            # Envoie du message Embed NSFW
-        message = Embed(title=choice(var.titles_possibilities), description=choice(var.message_possibilities), color=0xd97bda)
-        message.set_footer(text=f"Depuis Danbooru - ID: {image['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=200&v=4")
-        message.set_image(url=image['file_url'])
-        
         while not self.bot.is_closed():
+            now = dt.datetime.now(IST)
+            
             if now.hour == 12 or now.hour == 23:
+                image = choice(self.dan.post_list(tags="cat_girl nude", limit=10000))
+            
+                # Envoie du message Embed NSFW
+                message = Embed(title=choice(var.titles_possibilities), description=choice(var.message_possibilities), color=0xd97bda)
+                message.set_footer(text=f"Depuis Danbooru - ID: {image['id']}", icon_url="https://danbooru.donmai.us/packs/static/images/danbooru-logo-128x128-ea111b6658173e847734.png")
+                message.set_image(url=image['file_url'])
+                
                 view = Buttons()
                 view.add_item(discord.ui.Button(label="Lien vers l'image", style=discord.ButtonStyle.link, url=image['file_url']))
                 
