@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from discord.embeds import Embed
+from discord import app_commands
 import var
 
 class Basic(commands.Cog):
@@ -59,25 +59,26 @@ class Basic(commands.Cog):
         img = discord.File("/home/Tintin/discord_bot/Kiri-chan/images/proxydad.png")
         await ctx.send("Proxy's dad be like:", file=img)
         
-    @commands.command(name="help")
-    async def help(self, ctx):
-        await ctx.message.delete()
-        await ctx.send(embed=get_help())
+    # Pour synchroniser les commandes slash
+    @commands.command()
+    async def sync(self, ctx) -> None:
+        ctx.bot.tree.clear_commands(guild=ctx.guild)
+        
+        fmt = await ctx.bot.tree.sync()
+        await ctx.send(f"{len(fmt)} commandes ont été synchronisées.")
         
         
-def get_help():
-    message = Embed(title=":placard: Liste des commandes", color=0x256bdb)
-    
-    message.add_field(name="<:Danbooru:987708663751913533> Danbooru", value="^^helpDanbooru", inline=False)
-    message.add_field(name="<:Honkai:987849130967699566> Honkai Impact 3rd", value="^^helpHonkai", inline=False)
-    message.add_field(name="<:Nekopara:987708723315236864> Nekopara", value="^^helpNekopara", inline=False)
-    message.add_field(name="<:Princess_Connect:990382542102335528> Princess Connect", value="^^helpPrinconn", inline=False)
-    message.add_field(name="<:reddit:794069835138596886> Reddit", value="^^helpReddit", inline=False)
-    message.add_field(name="<:Safebooru:987708780026417212> Safebooru", value="^^helpSafebooru", inline=False)
-    message.add_field(name="<:Xenoblade:987708829624070215> Xenoblade", value="^^helpXenoblade", inline=False)
-    message.set_footer(text="NekoBot", icon_url="https://cdn.discordapp.com/avatars/857707035147108352/c84184eb6f2af3148579f92d05e7007f.png?size=4096")
-    
-    return message
+    # Affiche la version du Bot
+    @app_commands.command(name="version", description="Affiche la version du NekoBot.")
+    async def ver(self, interaction: discord.Integration) -> None:
+        await interaction.response.send_message(f"Je suis en en version **{var.version}**.")
+        
+    # Envoie le Lien du Github du Bot
+    @app_commands.command(name="github", description="Récupère le lien mon repo Github.")
+    async def git(self, interaction: discord.Interaction) -> None:
+        await interaction.response.send_message(f"Lien du repo: https://github.com/Tintin361/NekoBot")
+        
+        
     
 async def setup(bot):
     await bot.add_cog(Basic(bot))
