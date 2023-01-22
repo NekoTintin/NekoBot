@@ -1,9 +1,14 @@
-from random import choice
-
-import passwords as pswd
-from discord.embeds import Embed
+import discord
 from discord.ext import commands
+from discord.embeds import Embed
+from discord import app_commands
+
 from pybooru import Danbooru
+import passwords as pswd
+from random import choice
+import secrets
+from var import values
+from template import Posts_Button
 
 dan = Danbooru('danbooru', username="Kiri-chan27", api_key=pswd.danbooru_api)
 
@@ -11,71 +16,60 @@ class Xenoblade(commands.Cog):
     
     def __init__(self, bot) -> None:
         self.bot = bot
+        super().__init__()
         
-    @commands.command(name="nia", aliases=["Nia"])
-    async def nia(self, ctx, num=1, tag=""):
-        await ctx.message.delete()
-        # Petit message d'attente
-        search_msg = await ctx.send("<a:search:944484192018903060> Recherche en cours...")
+    @app_commands.command(name="nia", description="Affiche une image de Nia.")
+    async def nia(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
+        await interaction.response.defer(ephemeral=False)
         
-        size = 13 + len(tag)
-        for _ in range (num):
+        complete_tag = f"Nia_(xenoblade) {tag}"
+        for i in range(nombre):
+            errors = 0
             try:
-                message = from_danbooru(f"nia_(xenoblade) {tag}", size)
-                result = await ctx.send(embed=message)
-                await result.add_reaction("📝")
-            except:
-                await search_msg.edit(content="Erreur: la commande à plantée.")
-        await search_msg.delete()
-        
-        
-    @commands.command(name="mio", aliases=["Mio"])
-    async def mio(self, ctx, num=1, tag=""):
-        await ctx.message.delete()
-        # Petit message d'attente
-        search_msg = await ctx.send("<a:search:944484192018903060> Recherche en cours...")
+                image = choice(dan.post_list(tags=complete_tag, limit=5000))
+                
+                msg_color = discord.Color.from_str(f"#{secrets.token_hex(3)}")
+                msg = Embed(title="Recherche:", description=f"Nia de Xenoblade Chronicles.", color=msg_color)
+                msg.set_image(url=image['file_url'])
+                msg.set_footer(text=f"Depuis Danbooru - ID {image['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=280&v=4")
+                msg.set_thumbnail(url="https://i.kym-cdn.com/photos/images/original/002/308/234/14c.jpg")
 
-        size = 13 + len(tag)
-        for _ in range (num):
+                view = Posts_Button()
+                view.add_item(discord.ui.Button(label="Lien vers l'image", style=discord.ButtonStyle.link, url=image['file_url']))
+            
+                await interaction.followup.send(embed=msg, view=view)
+            except:
+                continue
+        
+        if errors > 0:
+            await interaction.followup.send(content=f"Nombres d'images qui n'ont pas pu être affichées: {errors}", ephemeral=True)
+            
+            
+    @app_commands.command(name="mio", description="Affiche une image de Mio.")
+    async def mio(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
+        await interaction.response.defer(ephemeral=False)
+        
+        complete_tag = f"mio_(xenoblade) {tag}"
+        for i in range(nombre):
+            errors = 0
             try:
-                message = from_danbooru(f"mio_(xenoblade) {tag}", size)
-                result = await ctx.send(embed=message)
-                await result.add_reaction("📝")
+                image = choice(dan.post_list(tags=complete_tag, limit=5000))
+                
+                msg_color = discord.Color.from_str(f"#{secrets.token_hex(3)}")
+                msg = Embed(title="Recherche:", description=f"Mio de Xenoblade Chronicles.", color=msg_color)
+                msg.set_image(url=image['file_url'])
+                msg.set_footer(text=f"Depuis Danbooru - ID {image['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=280&v=4")
+                msg.set_thumbnail(url="https://static.wikia.nocookie.net/xenoblade/images/2/2a/XC3_Mio_Launch_Celebration_Artwork.jpg/revision/latest/scale-to-width-down/1000?cb=20220729015426")
+
+                view = Posts_Button()
+                view.add_item(discord.ui.Button(label="Lien vers l'image", style=discord.ButtonStyle.link, url=image['file_url']))
+            
+                await interaction.followup.send(embed=msg, view=view)
             except:
-                await search_msg.edit(content="Erreur: la commande à plantée.")
-        await search_msg.delete()
+                continue
         
-    @commands.command(name="helpxenoblade", aliases=["helpXenoblade"])
-    async def aideXeno(self, ctx):
-        await ctx.message.delete()
-        await ctx.send(embed=get_help())
-        
-    
-def from_danbooru(tag: str, size: int) -> Embed:
-    color = 0x00314D
-    
-    posts = dan.post_list(tags=tag, limit=3000)
-    post = choice(posts)
+        if errors > 0:
+            await interaction.followup.send(content=f"Nombres d'images qui n'ont pas pu être affichées: {errors}", ephemeral=True)
             
-    # Envoie du message Embed
-    neko = tag[:-size].capitalize()
-    message = Embed(title=neko, description="", color=color)
-    message.add_field(name="Lien:", value=post['file_url'], inline=True)
-    message.set_footer(text=f"Depuis Danbooru- ID: {post['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=280&v=4")
-            
-    message.set_image(url=post['file_url'])
-    
-    
-    return message
-
-def get_help():
-    message = Embed(title="<:Xenoblade:987708829624070215> Liste des commandes Xenoblade", color=0xFF5700)
-    
-    message.add_field(name="^^nia [tag]", value="Affiche une image de Nia.", inline=True)
-    message.add_field(name="^^mio [tag]", value="Affiche une image de Mio.", inline=True)
-    
-    return message
-        
-
 async def setup(bot):
     await bot.add_cog(Xenoblade(bot))

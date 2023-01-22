@@ -1,4 +1,6 @@
-version = "1.5.1"
+from typing import Literal
+
+version = "1.5.2"
 online_message = "Frites"
 
 # Dictionnaire qui stocke les cogs chargés
@@ -23,3 +25,6 @@ titles_possibilities = ["NEKO TIME !", "DailyNeko en action !", "Un manque de Wa
 
 # Liste des messages pour le DailyNeko
 message_possibilities = ["Voici ta Neko du jour !", "Cette Neko est pour toi, à ce moment précis uniquement.", "C'est toujours important de combler les manques de Neko."]
+
+# Liste des valeurs pour les commandes
+values = Literal[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30, 40, 50]

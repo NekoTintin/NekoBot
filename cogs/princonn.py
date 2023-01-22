@@ -1,61 +1,48 @@
-from random import choice
-
-import passwords as pswd
-from discord.embeds import Embed
+import discord
 from discord.ext import commands
+from discord.embeds import Embed
+from discord import app_commands
+
 from pybooru import Danbooru
+import passwords as pswd
+from random import choice
+import secrets
+from var import values
+from template import Posts_Button
 
 dan = Danbooru('danbooru', username="Kiri-chan27", api_key=pswd.danbooru_api)
 
 class Princess_connect(commands.Cog):
-    
+
     def __init__(self, bot) -> None:
         self.bot = bot
-        
-    @commands.command(name="kiaru", aliases=["Kiaru"])
-    async def kiaru(self, ctx, num=1, tag=""):
-        await ctx.message.delete()
-        # Petit message d'attente
-        search_msg = await ctx.send("<a:search:944484192018903060> Recherche en cours...")
-        size = 21 + len(tag)
-        for _ in range(num):
-            try:
-                message = from_danbooru(f"karyl_(princess_connect!) {tag}", size)
-                result = await ctx.send(embed=message)
-                await result.add_reaction("📝")
-            except:
-                await search_msg.edit(content="Erreur: la commande à plantée.")
-        await search_msg.delete()
-        
-    @commands.command(name="helpprinconn", aliases=["helpPrinConn", "helpPrinconn"])
-    async def aidePrinconn(self, ctx):
-        await ctx.message.delete()
-        await ctx.send(embed=get_help())
-        
-    
-def from_danbooru(tag: str, size: int) -> Embed:
-    color = 0x00314D
-    
-    posts = dan.post_list(tags=tag, limit=3000)
-    post = choice(posts)
-            
-    # Envoie du message Embed
-    neko = tag[:-size].capitalize()
-    message = Embed(title=neko, description="", color=color)
-    message.add_field(name="Lien:", value=post['file_url'], inline=True)
-    message.set_footer(text=f"Depuis Danbooru- ID: {post['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=280&v=4")
-            
-    message.set_image(url=post['file_url'])
-    
-    
-    return message
+        super().__init__()
 
-def get_help():
-    message = Embed(title="<:Princess_Connect:990382542102335528> Liste des commandes pour Princess Connect", color=0xFF5700)
-    
-    message.add_field(name="^^kiaru [tag]", value="Affiche une image de Kiaru.", inline=True)
-    
-    return message
+    @app_commands.command(name="kiaru", description="Affiche une image de Kiaru.")
+    async def kiaru(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
+        await interaction.response.defer(ephemeral=False)
+        
+        complete_tag = f"karyl_(princess_connect!) {tag}"
+        for i in range(nombre):
+            errors = 0
+            try:
+                image = choice(dan.post_list(tags=complete_tag, limit=5000))
+                
+                msg_color = discord.Color.from_str(f"#{secrets.token_hex(3)}")
+                msg = Embed(title="Recherche:", description=f"Kiaru du jeu Princess Connect!", color=msg_color)
+                msg.set_image(url=image['file_url'])
+                msg.set_footer(text=f"Depuis Danbooru - ID {image['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=280&v=4")
+                msg.set_thumbnail(url="https://static.wikia.nocookie.net/saimoe/images/c/cb/Karyl.png/revision/latest?cb=20200804180939")
+
+                view = Posts_Button()
+                view.add_item(discord.ui.Button(label="Lien vers l'image", style=discord.ButtonStyle.link, url=image['file_url']))
+            
+                await interaction.followup.send(embed=msg, view=view)
+            except:
+                continue
+        
+        if errors > 0:
+            await interaction.followup.send(content=f"Nombres d'images qui n'ont pas pu être affichées: {errors}", ephemeral=True)
         
 
 async def setup(bot):

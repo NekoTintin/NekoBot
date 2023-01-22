@@ -15,17 +15,23 @@ IST = timezone('Europe/Paris')
 
 class Buttons(discord.ui.View):
     
-    @discord.ui.button(label="Ajouter à la liste", style=discord.ButtonStyle.success, emoji="📝")
+    def __init__(self, *, timeout = None):
+        super().__init__(timeout=timeout)
+    
+    @discord.ui.button(label="Ajouter à la liste", style=discord.ButtonStyle.success, emoji="📝", disabled=True)
     async def add_to_list(self, interaction: discord.Interaction, button: discord.ui.Button):
         id = interaction.user.id
         link = interaction.message.embeds[0].image.url
+        print(link)
         
         try:
             with open(f"/home/Tintin/discord_bot/NekoBot/data/{id}.txt", "a") as file:
-                file.write(f"{link}\n")
-            message = await interaction.response.send_message("✅ Ajouté à ta liste !", delete_after=30)
+                file.write(f"{link}\n")    
         except:
-            message = await interaction.response.send_message("❌ Impossible de l'ajouter à la liste...", delete_after=30)
+            await interaction.response.send_message("❌ Impossible de l'ajouter à la liste...", delete_after=30, ephemeral=True)
+            return
+        
+        await interaction.response.send_message("✅ Ajouté à ta liste !", delete_after=30, ephemeral=True)
         
     @discord.ui.button(label="Une autre !", style=discord.ButtonStyle.danger, emoji="🔁")
     async def repeat(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -33,10 +39,22 @@ class Buttons(discord.ui.View):
         
         if interaction.channel_id == 986006452848169041:
             safe = Danbooru('safebooru', username="Kiri-chan27", api_key=pswd.danbooru_api)
-            image = choice(safe.post_list(tags="cat_girl -furry", limit=10000))
+            is_valid = False
+            while is_valid == False:
+                try:
+                    image = choice(safe.post_list(tags="cat_girl -furry", limit=10000))
+                    is_valid = True
+                except:
+                    continue
         else:
             dan = Danbooru('danbooru', username="Kiri-chan27", api_key=pswd.danbooru_api)
-            image = choice(dan.post_list(tags="cat_girl nude", limit=10000))
+            is_valid = False
+            while is_valid == False:
+                try:
+                    image = choice(dan.post_list(tags="cat_girl nude", limit=10000))
+                    is_valid = True
+                except:
+                    continue
         
         channel = interaction.channel
         
@@ -68,10 +86,16 @@ class Dailyneko(commands.Cog):
             now = dt.datetime.now(IST)
             
             if now.hour == 12 or now.hour == 23:
-                image = choice(self.safe.post_list(tags="cat_girl -furry", limit=10000))
+                is_valid = False
+                while is_valid == False:
+                    try:
+                        image = choice(self.safe.post_list(tags="cat_girl -furry", limit=10000))
+                        is_valid = True
+                    except:
+                        continue
         
                 message = Embed(title=choice(var.titles_possibilities), description=choice(var.message_possibilities), color=0xFF5700)
-                message.set_footer(text=f"Depuis Safebooru - ID: {image['id']}", icon_url="https://safebooru.org/favicon.ico")
+                message.set_footer(text=f"Depuis Safebooru - ID: {image['id']}", icon_url="https://safebooru.org//samples/3249/sample_f6d42b7a58497b59d5db9205cc29703ead5f4425.jpg?3378314")
                 message.set_image(url=image['file_url'])
             
                 view = Buttons()
@@ -88,7 +112,13 @@ class Dailyneko(commands.Cog):
             now = dt.datetime.now(IST)
             
             if now.hour == 12 or now.hour == 23:
-                image = choice(self.dan.post_list(tags="cat_girl nude", limit=10000))
+                is_valid = False
+                while is_valid == False:
+                    try:
+                        image = choice(self.dan.post_list(tags="cat_girl nude", limit=10000))
+                        is_valid = True
+                    except:
+                        continue
             
                 # Envoie du message Embed NSFW
                 message = Embed(title=choice(var.titles_possibilities), description=choice(var.message_possibilities), color=0xd97bda)

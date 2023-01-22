@@ -1,9 +1,14 @@
-from random import choice
-
-import passwords as pswd
-from discord.embeds import Embed
+import discord
 from discord.ext import commands
+from discord import app_commands
+from discord.embeds import Embed
+
+import secrets
+import passwords as pswd
 from pybooru import Danbooru
+from random import choice
+from template import Posts_Button
+from var import values
 
 dan = Danbooru('danbooru', username="Kiri-chan27", api_key=pswd.danbooru_api)
 
@@ -11,168 +16,168 @@ class Nekopara(commands.Cog):
     
     def __init__(self, bot) -> None:
         self.bot = bot
+        super().__init__()
         
-    @commands.command(name="vanilla", aliases=["Vanilla"])
-    async def vanilla(self, ctx, iteration:int=1, tag=""):
-        await ctx.message.delete()
+    @app_commands.command(name="vanilla", description="Affiche une image de Vanilla.")
+    async def vanilla(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
+        await interaction.response.defer(ephemeral=False)
         
-        for _ in range (iteration):
-            # Petit message d'attente
-            search_msg = await ctx.send("<a:search:944484192018903060> Recherche en cours...")
-            size = 12 + len(tag)
+        complete_tag = f"vanilla_(nekopara) {tag}"
+        for i in range(nombre):
+            errors = 0
             try:
-                message = from_danbooru(f"vanilla_(nekopara) {tag}", size)
-                result = await ctx.send(embed=message)
-                await result.add_reaction("📝")
-            except:
-                await search_msg.edit(content="Erreur: la commande à plantée.")
-                if iteration == 1:
-                    return
-                else:
-                    continue
-            await search_msg.delete()
-        
-        
-    @commands.command(name="chocola", aliases=["Chocola"])
-    async def chocola(self, ctx, iteration:int=1, tag=""):
-        await ctx.message.delete()
-        
-        for _ in range (iteration):
-            # Petit message d'attente
-            search_msg = await ctx.send("<a:search:944484192018903060> Recherche en cours...")
-            size = 12 + len(tag)
-            try:
-                message = from_danbooru(f"chocola_(nekopara) {tag}", size)
-                result = await ctx.send(embed=message)
-                await result.add_reaction("📝")
-            except:
-                await search_msg.edit(content="Erreur: la commande à plantée.")
-                if iteration == 1:
-                    return
-                else:
-                    continue
-            await search_msg.delete()
-        
-        
-    @commands.command(name="coconut", aliases=["Coconut"])
-    async def coconut(self, ctx, iteration:int=1, tag=""):
-        await ctx.message.delete()
-        
-        for _ in range (iteration):
-            # Petit message d'attente
-            search_msg = await ctx.send("<a:search:944484192018903060> Recherche en cours...")
-            size = 12 + len(tag)
-            try:
-                message = from_danbooru(f"coconut_(nekopara) {tag}", size)
-                result = await ctx.send(embed=message)
-                await result.add_reaction("📝")
-            except:
-                await search_msg.edit(content="Erreur: la commande à plantée.")
-                if iteration == 1:
-                    return
-                else:
-                    continue
-            await search_msg.delete()
-        
-        
-    @commands.command(name="maple", aliases=["Maple"])
-    async def maple(self, ctx, iteration:int=1, tag=""):
-        await ctx.message.delete()
-        
-        for _ in range (iteration):
-            # Petit message d'attente
-            search_msg = await ctx.send("<a:search:944484192018903060> Recherche en cours...")
-            size = 12 + len(tag)
-            try:
-                message = from_danbooru(f"maple_(nekopara) {tag}", size)
-                result = await ctx.send(embed=message)
-                await result.add_reaction("📝")
-            except:
-                await search_msg.edit(content="Erreur: la commande à plantée.")
-                if iteration == 1:
-                    return
-                else:
-                    continue
-            await search_msg.delete()
-        
-        
-    @commands.command(name="cinnamon", aliases=["Cinnamon", "Cinna", "cinna"])
-    async def cinnamon(self, ctx, iteration:int=1, tag=""):
-        await ctx.message.delete()
-        
-        for _ in range (iteration):
-            # Petit message d'attente
-            search_msg = await ctx.send("<a:search:944484192018903060> Recherche en cours...")
-            size = 12 + len(tag)
-            try:
-                message = from_danbooru(f"cinnamon_(nekopara) {tag}", size)
-                result = await ctx.send(embed=message)
-                await result.add_reaction("📝")
-            except:
-                await search_msg.edit(content="Erreur: la commande à plantée.")
-                if iteration == 1:
-                    return
-                else:
-                    continue
-            await search_msg.delete()
-        
-        
-    @commands.command(name="azuki", aliases=["Azuki"])
-    async def azuki(self, ctx, iteration:int=1, tag=""):
-        await ctx.message.delete()
-        
-        for _ in range (iteration):
-            # Petit message d'attente
-            search_msg = await ctx.send("<a:search:944484192018903060> Recherche en cours...")
-            size = 12 + len(tag)  
-            try:
-                message = from_danbooru(f"azuki_(nekopara) {tag}", size)
-                result = await ctx.send(embed=message)
-                await result.add_reaction("📝")
-            except:
-                await search_msg.edit(content="Erreur: la commande à plantée.")
-                if iteration == 1:
-                    return
-                else:
-                    continue
-            await search_msg.delete()
-        
-    
-    @commands.command(name="helpNekopara", aliases=["helpnekopara"])
-    async def aideNekopara(self, ctx):
-        await ctx.message.delete()
-        await ctx.send(embed=get_help())  
-        
+                image = choice(dan.post_list(tags=complete_tag, limit=5000))
+                
+                msg_color = discord.Color.from_str(f"#{secrets.token_hex(3)}")
+                msg = Embed(title="Recherche:", description=f"Vanilla de Nekopara.", color=msg_color)
+                msg.set_image(url=image['file_url'])
+                msg.set_footer(text=f"Depuis Danbooru - ID {image['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=280&v=4")
+                msg.set_thumbnail(url="https://pbs.twimg.com/media/EHStm4yUcAAIgFe?format=png&name=small")
 
-def from_danbooru(tag: str, size: int) -> Embed:
-    color = 0x00314D
-    
-    posts = dan.post_list(tags=tag, limit=3000)
-    post = choice(posts)
+                view = Posts_Button()
+                view.add_item(discord.ui.Button(label="Lien vers l'image", style=discord.ButtonStyle.link, url=image['file_url']))
             
-    # Envoie du message Embed
-    neko = tag[:-size].capitalize()
-    message = Embed(title=neko, description="", color=color)
-    message.add_field(name="Lien:", value=post['file_url'], inline=True)
-    message.set_footer(text=f"Depuis Danbooru- ID: {post['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=280&v=4")
+                await interaction.followup.send(embed=msg, view=view)
+            except:
+                continue
+        
+        if errors > 0:
+            await interaction.followup.send(content=f"Nombres d'images qui n'ont pas pu être affichées: {errors}", ephemeral=True)
             
-    message.set_image(url=post['file_url'])
     
-    
-    return message
+    @app_commands.command(name="chocola", description="Affiche une image de Chocola.")
+    async def chocola(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
+        await interaction.response.defer(ephemeral=False)
+        
+        complete_tag = f"chocola_(nekopara) {tag}"
+        for i in range(nombre):
+            errors = 0
+            try:
+                image = choice(dan.post_list(tags=complete_tag, limit=5000))
+                
+                msg_color = discord.Color.from_str(f"#{secrets.token_hex(3)}")
+                msg = Embed(title="Recherche:", description=f"Chocola de Nekopara.", color=msg_color)
+                msg.set_image(url=image['file_url'])
+                msg.set_footer(text=f"Depuis Danbooru - ID {image['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=280&v=4")
+                msg.set_thumbnail(url="https://i.pinimg.com/564x/07/84/0e/07840edacdd1ab489bce6efe9ff0e599.jpg")
 
-def get_help():
-    message = Embed(title="<:Nekopara:987708723315236864> Nekopara", description="Vous pouvez ajouter un tag à la fin de chaque commandes.", color=0x00314D)
-    
-    message.add_field(name="^^vanilla [nombre d'images] [tag]", value="Affiche une image de Vanilla.", inline=False)
-    message.add_field(name="^^chocola [nombre d'images] [tag]", value="Affiche une image de Chocola.", inline=False)
-    message.add_field(name="^^coconut [nombre d'images] [tag]", value="Affiche une image de Coconut.", inline=False)
-    message.add_field(name="^^maple [nombre d'images] [tag]", value="Affiche une image de Maple.", inline=False)
-    message.add_field(name="^^cinnamon [nombre d'images] [tag]", value="Affiche une image de Cinnamon.", inline=False)
-    message.add_field(name="^^azuki [nombre d'images] [tag]", value="Affiche une image de Azuki.", inline=False)
-    
-    return message
-  
+                view = Posts_Button()
+                view.add_item(discord.ui.Button(label="Lien vers l'image", style=discord.ButtonStyle.link, url=image['file_url']))
+            
+                await interaction.followup.send(embed=msg, view=view)
+            except:
+                continue
+        
+        if errors > 0:
+            await interaction.followup.send(content=f"Nombres d'images qui n'ont pas pu être affichées: {errors}", ephemeral=True)
+            
+            
+            
+    @app_commands.command(name="coconut", description="Affiche une image de Coconut.")
+    async def coconut(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
+        await interaction.response.defer(ephemeral=False)
+        
+        complete_tag = f"coconut_(nekopara) {tag}"
+        for i in range(nombre):
+            errors = 0
+            try:
+                image = choice(dan.post_list(tags=complete_tag, limit=5000))
+                
+                msg_color = discord.Color.from_str(f"#{secrets.token_hex(3)}")
+                msg = Embed(title="Recherche:", description=f"Coconut de Nekopara.", color=msg_color)
+                msg.set_image(url=image['file_url'])
+                msg.set_footer(text=f"Depuis Danbooru - ID {image['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=280&v=4")
+                msg.set_thumbnail(url="https://i.pinimg.com/564x/06/da/9d/06da9d1b176d43704a4333af04764d0c.jpg")
 
+                view = Posts_Button()
+                view.add_item(discord.ui.Button(label="Lien vers l'image", style=discord.ButtonStyle.link, url=image['file_url']))
+            
+                await interaction.followup.send(embed=msg, view=view)
+            except:
+                continue
+        
+        if errors > 0:
+            await interaction.followup.send(content=f"Nombres d'images qui n'ont pas pu être affichées: {errors}", ephemeral=True)
+            
+    @app_commands.command(name="maple", description="Affiche une image de Maple.")
+    async def maple(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
+        await interaction.response.defer(ephemeral=False)
+        
+        complete_tag = f"maple_(nekopara) {tag}"
+        for i in range(nombre):
+            errors = 0
+            try:
+                image = choice(dan.post_list(tags=complete_tag, limit=5000))
+                
+                msg_color = discord.Color.from_str(f"#{secrets.token_hex(3)}")
+                msg = Embed(title="Recherche:", description=f"Maple de Nekopara.", color=msg_color)
+                msg.set_image(url=image['file_url'])
+                msg.set_footer(text=f"Depuis Danbooru - ID {image['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=280&v=4")
+                msg.set_thumbnail(url="https://i.pinimg.com/564x/a1/42/4e/a1424e2e0031b38771264916f46a9368.jpg")
+
+                view = Posts_Button()
+                view.add_item(discord.ui.Button(label="Lien vers l'image", style=discord.ButtonStyle.link, url=image['file_url']))
+            
+                await interaction.followup.send(embed=msg, view=view)
+            except:
+                continue
+        
+        if errors > 0:
+            await interaction.followup.send(content=f"Nombres d'images qui n'ont pas pu être affichées: {errors}", ephemeral=True)
+            
+    @app_commands.command(name="cinnamon", description="Affiche une image de Cinnamon.")
+    async def cinnamon(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
+        await interaction.response.defer(ephemeral=False)
+        
+        complete_tag = f"cinnamon_(nekopara) {tag}"
+        for i in range(nombre):
+            errors = 0
+            try:
+                image = choice(dan.post_list(tags=complete_tag, limit=5000))
+                
+                msg_color = discord.Color.from_str(f"#{secrets.token_hex(3)}")
+                msg = Embed(title="Recherche:", description=f"Cinnamon de Nekopara.", color=msg_color)
+                msg.set_image(url=image['file_url'])
+                msg.set_footer(text=f"Depuis Danbooru - ID {image['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=280&v=4")
+                msg.set_thumbnail(url="https://www.nautiljon.com/images/perso/00/26/cinnamon_16162.webp?1578938713")
+
+                view = Posts_Button()
+                view.add_item(discord.ui.Button(label="Lien vers l'image", style=discord.ButtonStyle.link, url=image['file_url']))
+            
+                await interaction.followup.send(embed=msg, view=view)
+            except:
+                continue
+        
+        if errors > 0:
+            await interaction.followup.send(content=f"Nombres d'images qui n'ont pas pu être affichées: {errors}", ephemeral=True)
+            
+    @app_commands.command(name="azuki", description="Affiche une image de Azuki.")
+    async def azuki(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
+        await interaction.response.defer(ephemeral=False)
+        
+        complete_tag = f"azuki_(nekopara) {tag}"
+        for i in range(nombre):
+            errors = 0
+            try:
+                image = choice(dan.post_list(tags=complete_tag, limit=5000))
+                
+                msg_color = discord.Color.from_str(f"#{secrets.token_hex(3)}")
+                msg = Embed(title="Recherche:", description=f"Azuki de Nekopara.", color=msg_color)
+                msg.set_image(url=image['file_url'])
+                msg.set_footer(text=f"Depuis Danbooru - ID {image['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=280&v=4")
+                msg.set_thumbnail(url="https://wallpapercave.com/uwp/uwp1024376.jpeg")
+
+                view = Posts_Button()
+                view.add_item(discord.ui.Button(label="Lien vers l'image", style=discord.ButtonStyle.link, url=image['file_url']))
+            
+                await interaction.followup.send(embed=msg, view=view)
+            except:
+                continue
+        
+        if errors > 0:
+            await interaction.followup.send(content=f"Nombres d'images qui n'ont pas pu être affichées: {errors}", ephemeral=True)
+            
 async def setup(bot):
     await bot.add_cog(Nekopara(bot))
+    
+    

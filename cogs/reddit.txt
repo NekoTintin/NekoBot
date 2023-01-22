@@ -67,11 +67,6 @@ class FromReddit(commands.Cog):
             except:
                 await search_msg.edit(content="Erreur: la commande à plantée.")
         await search_msg.delete()
-        
-    @commands.command(name="helpReddit", aliases=["helpreddit"])
-    async def aideReddit(self, ctx):
-        await ctx.message.delete()
-        await ctx.send(embed=get_help())
 
 
 def get_post(sub: str) -> Embed:
@@ -90,16 +85,6 @@ def get_post(sub: str) -> Embed:
     message.set_image(url=submission.url)
         
         
-    return message
-
-
-def get_help():
-    message = Embed(title="<:reddit:794069835138596886> Liste des commandes pour Reddit", color=0xFF5700)
-    
-    message.add_field(name="^^nekomimi", value="Affiche un post depuis r/nekomimi.", inline=True)
-    message.add_field(name="^^nekohentai", value="Affiche un post depuis r/nekohentai.", inline=True)
-    message.add_field(name="^^nekopara", value="Affiche un post depuis r/nekopara.", inline=True)
-    
     return message
         
 

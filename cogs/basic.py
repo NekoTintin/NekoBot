@@ -18,7 +18,7 @@ class Basic(commands.Cog):
         if message.author == self.bot.user:
             return
         if self.bot.user.mentioned_in(message) and message.mention_everyone == False:
-            await message.channel.send(f"Hey {message.author.mention}, utilise **^^help** pour afficher la liste des commandes.")
+            await message.channel.send(f"Hey {message.author.mention}, utilise **/** pour afficher la liste des commandes.")
             
     # Permet de charger un cog
     @commands.command(name="load")
@@ -51,22 +51,19 @@ class Basic(commands.Cog):
         for mod in var.get_modules():
             message += f"- *{mod}*\n"
         await ctx.send(message)
-            
-    @commands.command(name="proxynekodad")
-    async def proxynekodad(self, ctx):
-        await ctx.message.delete()
-        
-        img = discord.File("/home/Tintin/discord_bot/Kiri-chan/images/proxydad.png")
-        await ctx.send("Proxy's dad be like:", file=img)
         
     # Pour synchroniser les commandes slash
-    @commands.command()
+    @commands.command(name="sync")
     async def sync(self, ctx) -> None:
-        ctx.bot.tree.clear_commands(guild=ctx.guild)
-        
         fmt = await ctx.bot.tree.sync()
         await ctx.send(f"{len(fmt)} commandes ont été synchronisées.")
         
+        
+    # Affiche une photo du Papa de Proxy
+    @app_commands.command(name="proxynekodad", description="Le papa de Proxy, oui oui !")
+    async def proxy(self, interaction: discord.Interaction) -> None:
+        img = discord.File("/home/Tintin/discord_bot/Kiri-chan/images/proxydad.png")
+        await interaction.response.send_message("Proxy's dad be like:", file=img)
         
     # Affiche la version du Bot
     @app_commands.command(name="version", description="Affiche la version du NekoBot.")
