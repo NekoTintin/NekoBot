@@ -18,12 +18,11 @@ class Download(commands.Cog):
         
         # Vérifie si la liste de l'utilisateur existe
         if not path.exists(f"{list_path}/{interaction.user.id}.txt"):
-            await interaction.response.send_message("Erreur: Ta liste ne contient aucune images.")
+            await interaction.response.send_message("Erreur: Ta liste ne contient aucune image.")
             return
 
         await interaction.response.defer(ephemeral=True)
         if not path.exists(f"{list_path}/{interaction.user.id}"):
-        
             makedirs(f"{list_path}/{interaction.user.id}")
         
         download_list = list()
@@ -34,6 +33,7 @@ class Download(commands.Cog):
         
         error_num = 0
         for current_img, link in enumerate(download_list):
+            print(f"{current_img} {link}")
             try:
                 urllib.request.urlretrieve(link, f"{list_path}/{interaction.user.id}/image_{current_img}.png")
             except:
