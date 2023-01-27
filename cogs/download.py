@@ -19,12 +19,8 @@ class Posts_Button(discord.ui.View):
         link = interaction.message.embeds[0].image.url
         
         try:
-            print("ééé")
             with open(f"/home/Tintin/discord_bot/NekoBot/data/{id}.txt", "a") as file:
-                print("ééé")
                 file.write(f"{link}\n")
-                print("ééé")
-            print("ééé")
             await interaction.response.send_message("✅ Ajouté à ta liste !", delete_after=30, ephemeral=True)
             return
         except:

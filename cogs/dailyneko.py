@@ -27,11 +27,12 @@ class Buttons(discord.ui.View):
         try:
             with open(f"/home/Tintin/discord_bot/NekoBot/data/{id}.txt", "a") as file:
                 file.write(f"{link}\n")    
+            await interaction.response.send_message("✅ Ajouté à ta liste !", delete_after=30, ephemeral=True)
+            return
         except:
             await interaction.response.send_message("❌ Impossible de l'ajouter à la liste...", delete_after=30, ephemeral=True)
             return
         
-        await interaction.response.send_message("✅ Ajouté à ta liste !", delete_after=30, ephemeral=True)
         
     @discord.ui.button(label="Une autre !", style=discord.ButtonStyle.danger, emoji="🔁")
     async def repeat(self, interaction: discord.Interaction, button: discord.ui.Button):
