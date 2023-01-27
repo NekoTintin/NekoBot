@@ -23,8 +23,8 @@ class Xenoblade(commands.Cog):
         await interaction.response.defer(ephemeral=False)
         
         complete_tag = f"Nia_(xenoblade) {tag}"
-        for i in range(nombre):
-            errors = 0
+        errors = 0
+        for _ in range(nombre):
             try:
                 image = choice(dan.post_list(tags=complete_tag, limit=5000))
                 
@@ -37,12 +37,13 @@ class Xenoblade(commands.Cog):
                 view = Posts_Button()
                 view.add_item(discord.ui.Button(label="Lien vers l'image", style=discord.ButtonStyle.link, url=image['file_url']))
             
-                await interaction.followup.send(embed=msg, view=view)
+                await interaction.followup.send(embed=msg, view=view, ephemeral=False)
             except:
+                errors += 1
                 continue
         
         if errors > 0:
-            await interaction.followup.send(content=f"Nombres d'images qui n'ont pas pu être affichées: {errors}", ephemeral=True)
+            await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
             
             
     @app_commands.command(name="mio", description="Affiche une image de Mio.")
@@ -50,8 +51,8 @@ class Xenoblade(commands.Cog):
         await interaction.response.defer(ephemeral=False)
         
         complete_tag = f"mio_(xenoblade) {tag}"
-        for i in range(nombre):
-            errors = 0
+        errors = 0
+        for _ in range(nombre):
             try:
                 image = choice(dan.post_list(tags=complete_tag, limit=5000))
                 
@@ -64,12 +65,13 @@ class Xenoblade(commands.Cog):
                 view = Posts_Button()
                 view.add_item(discord.ui.Button(label="Lien vers l'image", style=discord.ButtonStyle.link, url=image['file_url']))
             
-                await interaction.followup.send(embed=msg, view=view)
+                await interaction.followup.send(embed=msg, view=view, ephemeral=False)
             except:
+                errors += 1
                 continue
         
         if errors > 0:
-            await interaction.followup.send(content=f"Nombres d'images qui n'ont pas pu être affichées: {errors}", ephemeral=True)
+            await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
             
 async def setup(bot):
     await bot.add_cog(Xenoblade(bot))

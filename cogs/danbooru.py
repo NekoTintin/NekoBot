@@ -1,9 +1,14 @@
-from random import choice
-
-import passwords as pswd
-from discord.embeds import Embed
+import discord
 from discord.ext import commands
+from discord.embeds import Embed
+from discord import app_commands
+
 from pybooru import Danbooru
+from random import choice
+from secrets import token_hex
+import passwords as pswd
+from var import values
+from template import Posts_Button
 
 dan = Danbooru('danbooru', username="Kiri-chan27", api_key=pswd.danbooru_api)
 
@@ -11,55 +16,34 @@ class DanbooruCog(commands.Cog):
     
     def __init__(self, bot) -> None:
         self.bot = bot
+        super().__init__()
         
-    @commands.command(name="danbooru", aliases=["Danbooru", "dan", "Dan"])
-    async def dan(self, ctx, iteration:int=1, tag=""):
-        await ctx.message.delete()
+    
+    @app_commands.command(name="randomneko", description="Affiche une image de Neko depuis Danbooru")
+    async def dan(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
+        await interaction.response.defer(ephemeral=False)
         
-        for _ in range (iteration):
-            # Petit message d'attente
-            search_msg = await ctx.send("<a:search:944484192018903060> Recherche sur Danbooru en cours...")
+        comptete_tag = f"cat_girl {tag}"
+        errors = 0
+        for _ in range(nombre):
             try:
-                message = from_danbooru(f"cat_girl {tag}")
-                result = await ctx.send(embed=message)
-                await result.add_reaction("📝")
+                image = choice(dan.post_list(tags=comptete_tag, limit=5000))
+                
+                msg_color = discord.Color.from_str(f'#{token_hex(3)}')
+                msg = Embed(title="Recherche:", description="Une image de Neko depuis Danbooru.", color=msg_color)
+                msg.set_image(url=image['file_url'])
+                msg.set_footer(text=f"Depuis Danbooru - ID {image['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=280&v=4")
+                
+                view = Posts_Button(timeout=None)
+                view.add_item(discord.ui.Button(label="Lien vers l'image", style=discord.ButtonStyle.link, url=image['file_url']))
+                
+                await interaction.followup.send(embed=msg, view=view, ephemeral=False)
             except:
-                await search_msg.edit(content="Erreur: la commande à plantée.")
-                if iteration== 1:
-                    return
-                else:
-                    continue
-            await search_msg.delete()
-        
-    @commands.command(name="helpDanbooru", aliases=["helpdanbooru"])
-    async def aideDanbooru(self, ctx):
-        await ctx.message.delete()
-        await ctx.send(embed=get_help())
-        
-        
-def from_danbooru(tag: str) -> Embed:
-    color = 0x00314D
-    
-    posts = dan.post_list(tags=tag, limit=3000)
-    post = choice(posts)
+                errors += 1
+                continue
             
-    # Envoie du message Embed
-    message = Embed(title="Neko !!!", description="", color=color)
-    message.add_field(name="Lien:", value=post['file_url'], inline=True)
-    message.set_footer(text=f"Depuis Danbooru- ID: {post['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=280&v=4")
-            
-    message.set_image(url=post['file_url'])
-    
-    
-    return message
-
-
-def get_help():
-    helpMSG = Embed(title="<:Danbooru:987708663751913533> Liste des commandes pour Danbooru", color=0x00314D)
-    
-    helpMSG.add_field(name="^^danbooru [nombre d'images] [tag]", value="Affiche une image de neko depuis Danbooru, vous pouvez ajouter un tag de recherche supplémentaire.")
-    
-    return helpMSG
+        if errors > 0:
+            await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
         
 async def setup(bot):
     await bot.add_cog(DanbooruCog(bot))

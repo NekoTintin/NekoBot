@@ -23,8 +23,8 @@ class Nekopara(commands.Cog):
         await interaction.response.defer(ephemeral=False)
         
         complete_tag = f"vanilla_(nekopara) {tag}"
+        errors = 0
         for i in range(nombre):
-            errors = 0
             try:
                 image = choice(dan.post_list(tags=complete_tag, limit=5000))
                 
@@ -37,12 +37,13 @@ class Nekopara(commands.Cog):
                 view = Posts_Button()
                 view.add_item(discord.ui.Button(label="Lien vers l'image", style=discord.ButtonStyle.link, url=image['file_url']))
             
-                await interaction.followup.send(embed=msg, view=view)
+                await interaction.followup.send(embed=msg, view=view, ephemeral=False)
             except:
+                errors += 1
                 continue
         
         if errors > 0:
-            await interaction.followup.send(content=f"Nombres d'images qui n'ont pas pu être affichées: {errors}", ephemeral=True)
+            await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
             
     
     @app_commands.command(name="chocola", description="Affiche une image de Chocola.")
@@ -50,8 +51,8 @@ class Nekopara(commands.Cog):
         await interaction.response.defer(ephemeral=False)
         
         complete_tag = f"chocola_(nekopara) {tag}"
+        errors = 0
         for i in range(nombre):
-            errors = 0
             try:
                 image = choice(dan.post_list(tags=complete_tag, limit=5000))
                 
@@ -64,12 +65,13 @@ class Nekopara(commands.Cog):
                 view = Posts_Button()
                 view.add_item(discord.ui.Button(label="Lien vers l'image", style=discord.ButtonStyle.link, url=image['file_url']))
             
-                await interaction.followup.send(embed=msg, view=view)
+                await interaction.followup.send(embed=msg, view=view, ephemeral=False)
             except:
+                errors += 1
                 continue
         
         if errors > 0:
-            await interaction.followup.send(content=f"Nombres d'images qui n'ont pas pu être affichées: {errors}", ephemeral=True)
+            await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
             
             
             
@@ -78,8 +80,8 @@ class Nekopara(commands.Cog):
         await interaction.response.defer(ephemeral=False)
         
         complete_tag = f"coconut_(nekopara) {tag}"
+        errors = 0
         for i in range(nombre):
-            errors = 0
             try:
                 image = choice(dan.post_list(tags=complete_tag, limit=5000))
                 
@@ -94,18 +96,19 @@ class Nekopara(commands.Cog):
             
                 await interaction.followup.send(embed=msg, view=view)
             except:
+                errors += 1
                 continue
         
         if errors > 0:
-            await interaction.followup.send(content=f"Nombres d'images qui n'ont pas pu être affichées: {errors}", ephemeral=True)
+            await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
             
     @app_commands.command(name="maple", description="Affiche une image de Maple.")
     async def maple(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
         await interaction.response.defer(ephemeral=False)
         
         complete_tag = f"maple_(nekopara) {tag}"
+        errors = 0
         for i in range(nombre):
-            errors = 0
             try:
                 image = choice(dan.post_list(tags=complete_tag, limit=5000))
                 
@@ -120,18 +123,19 @@ class Nekopara(commands.Cog):
             
                 await interaction.followup.send(embed=msg, view=view)
             except:
+                errors += 1
                 continue
         
         if errors > 0:
-            await interaction.followup.send(content=f"Nombres d'images qui n'ont pas pu être affichées: {errors}", ephemeral=True)
+            await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
             
     @app_commands.command(name="cinnamon", description="Affiche une image de Cinnamon.")
     async def cinnamon(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
         await interaction.response.defer(ephemeral=False)
         
         complete_tag = f"cinnamon_(nekopara) {tag}"
+        errors = 0
         for i in range(nombre):
-            errors = 0
             try:
                 image = choice(dan.post_list(tags=complete_tag, limit=5000))
                 
@@ -146,18 +150,19 @@ class Nekopara(commands.Cog):
             
                 await interaction.followup.send(embed=msg, view=view)
             except:
+                errors += 1
                 continue
         
         if errors > 0:
-            await interaction.followup.send(content=f"Nombres d'images qui n'ont pas pu être affichées: {errors}", ephemeral=True)
+            await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
             
     @app_commands.command(name="azuki", description="Affiche une image de Azuki.")
     async def azuki(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
         await interaction.response.defer(ephemeral=False)
         
         complete_tag = f"azuki_(nekopara) {tag}"
+        errors = 0
         for i in range(nombre):
-            errors = 0
             try:
                 image = choice(dan.post_list(tags=complete_tag, limit=5000))
                 
@@ -172,10 +177,11 @@ class Nekopara(commands.Cog):
             
                 await interaction.followup.send(embed=msg, view=view)
             except:
+                errors += 1
                 continue
         
         if errors > 0:
-            await interaction.followup.send(content=f"Nombres d'images qui n'ont pas pu être affichées: {errors}", ephemeral=True)
+            await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
             
 async def setup(bot):
     await bot.add_cog(Nekopara(bot))
