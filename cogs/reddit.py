@@ -7,7 +7,7 @@ from praw import Reddit as Red
 from secrets import token_hex
 import passwords as pwrd
 from var import values
-from template import Posts_Button
+from cogs.download import Posts_Button
 from random import choice
 
 wrapper = Red(

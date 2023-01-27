@@ -8,7 +8,7 @@ import passwords as pswd
 from random import choice
 import secrets
 from var import values
-from template import Posts_Button
+from cogs.download import Posts_Button
 
 dan = Danbooru('danbooru', username="Kiri-chan27", api_key=pswd.danbooru_api)
 

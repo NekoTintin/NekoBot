@@ -7,7 +7,7 @@ import secrets
 import passwords as pswd
 from pybooru import Danbooru
 from random import choice
-from template import Posts_Button
+from cogs.download import Posts_Button
 from var import values
 
 dan = Danbooru('danbooru', username="Kiri-chan27", api_key=pswd.danbooru_api)
