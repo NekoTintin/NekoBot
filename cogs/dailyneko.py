@@ -18,19 +18,18 @@ class Buttons(discord.ui.View):
     def __init__(self, *, timeout = None):
         super().__init__(timeout=timeout)
     
-    @discord.ui.button(label="Ajouter à la liste", style=discord.ButtonStyle.success, emoji="📝", disabled=True)
+    @discord.ui.button(label="Ajouter à la liste", style=discord.ButtonStyle.success, emoji="📝")
     async def add_to_list(self, interaction: discord.Interaction, button: discord.ui.Button):
         id = interaction.user.id
         link = interaction.message.embeds[0].image.url
-        print(link)
         
         try:
             with open(f"/home/Tintin/discord_bot/NekoBot/data/{id}.txt", "a") as file:
                 file.write(f"{link}\n")    
-            await interaction.response.send_message("✅ Ajouté à ta liste !", delete_after=30, ephemeral=True)
+            await interaction.response.send_message("✅ Ajouté à ta liste !", delete_after=15, ephemeral=True)
             return
         except:
-            await interaction.response.send_message("❌ Impossible de l'ajouter à la liste...", delete_after=30, ephemeral=True)
+            await interaction.response.send_message("❌ Impossible de l'ajouter à la liste...", delete_after=15, ephemeral=True)
             return
         
         
@@ -46,6 +45,7 @@ class Buttons(discord.ui.View):
                     image = choice(safe.post_list(tags="cat_girl -furry", limit=10000))
                     is_valid = True
                 except:
+                    asyncio.sleep(3)
                     continue
         else:
             dan = Danbooru('danbooru', username="Kiri-chan27", api_key=pswd.danbooru_api)
@@ -55,6 +55,7 @@ class Buttons(discord.ui.View):
                     image = choice(dan.post_list(tags="cat_girl nude", limit=10000))
                     is_valid = True
                 except:
+                    asyncio.sleep(3)
                     continue
         
         channel = interaction.channel

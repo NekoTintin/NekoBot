@@ -1,13 +1,24 @@
-#from http import client
-#import discord
-#from discord.ext import commands
-#import passwords
+import discord
+from discord.ext import commands
+from discord import app_commands
 
-#class Pixiv(commands.Cog):
+from pixivapi import Client
+import passwords
+import var
+
+class Pixiv(commands.Cog):
     
-    #def __init__(self, bot) -> None:
-        #self.bot = bot
+    def __init__(self, bot) -> None:
+        self.bot = bot
+        self.client = Client()
+        super().__init__()
+        
+    @app_commands.command(name="pixiv", description="Affiche une image de Neko depuis Pixiv.")
+    async def pix(self, interaction: discord.Interaction, nombre: var.values, tags: str = ""):
+        await interaction.response.defer()
         
         
-#def setup(bot):
-    #bot.add_cog(Pixiv(bot))
+        
+        
+def setup(bot):
+    bot.add_cog(Pixiv(bot))

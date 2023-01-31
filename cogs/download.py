@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from discord.embeds import Embed
 from discord import app_commands
 
 from os import makedirs, listdir, remove, path
@@ -21,10 +22,10 @@ class Posts_Button(discord.ui.View):
         try:
             with open(f"/home/Tintin/discord_bot/NekoBot/data/{id}.txt", "a") as file:
                 file.write(f"{link}\n")
-            await interaction.response.send_message("✅ Ajouté à ta liste !", delete_after=30, ephemeral=True)
+            await interaction.response.send_message("✅ Ajouté à ta liste !", delete_after=15, ephemeral=True)
             return
         except:
-            await interaction.response.send_message("❌ Impossible de l'ajouter à la liste...", delete_after=30, ephemeral=True)
+            await interaction.response.send_message("❌ Impossible de l'ajouter à la liste...", delete_after=15, ephemeral=True)
             return
 
 class Download(commands.Cog):
@@ -75,6 +76,21 @@ class Download(commands.Cog):
         for num, link in enumerate(download_list):
             remove(f"{list_path}/{interaction.user.id}/image_{num}.png")
         remove(f"{list_path}/{interaction.user.id}.txt")
+        
+    @app_commands.command(name="nekolist", description="Affiche ta liste de tes images.")
+    async def nekolist(self, interaction: discord.Interaction):
+        if not path.exists(f"{list_path}/{interaction.user.id}.txt"):
+            await interaction.response.send_message("Ta liste ne contient aucune image.", ephemeral=True)
+            
+        msg = Embed(title=f"Liste de: {interaction.user.display_name}", description="")
+        msg.set_footer(text="Nekobot", icon_url="https://images-ext-1.discordapp.net/external/SC2OmN2b0t2QlraDbClwZC6SG67oiBB7Ap67BCkVc30/%3Fsize%3D4096%26ignore%3Dtrue/https/cdn.discordapp.com/avatars/857707035147108352/ec9f08b8f677eb5dee3f5d950fec22b9.png?width=634&height=634")
+        with open(f"{list_path}/{interaction.user.id}.txt", "r") as file:
+            lines = file.readlines()
+            for num, line in enumerate(lines):
+                msg.add_field(name=f"{num}.", value=f"{line}", inline=False)
+                
+        await interaction.response.send_message(embed=msg, ephemeral=True)
+        
         
 async def setup(bot):
     await bot.add_cog(Download(bot))
