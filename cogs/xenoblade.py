@@ -20,6 +20,8 @@ class Xenoblade(commands.Cog):
         
     @app_commands.command(name="nia", description="Affiche une image de Nia.")
     async def nia(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
+        if not interaction.channel.is_nsfw():
+            return await interaction.response.send_message("Erreur: Cette commande ne fonctionne que dans un salon NSFW.", ephemeral=True)
         await interaction.response.defer(ephemeral=False)
         
         complete_tag = f"Nia_(xenoblade) {tag}"
@@ -48,6 +50,8 @@ class Xenoblade(commands.Cog):
             
     @app_commands.command(name="mio", description="Affiche une image de Mio.")
     async def mio(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
+        if not interaction.channel.is_nsfw():
+            return await interaction.response.send_message("Erreur: Cette commande ne fonctionne que dans un salon NSFW.", ephemeral=True)
         await interaction.response.defer(ephemeral=False)
         
         complete_tag = f"mio_(xenoblade) {tag}"

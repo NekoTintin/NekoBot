@@ -75,7 +75,6 @@ class Basic(commands.Cog):
     async def git(self, interaction: discord.Interaction) -> None:
         await interaction.response.send_message(f"Lien du repo: https://github.com/Tintin361/NekoBot")
         
-        
     
 async def setup(bot):
     await bot.add_cog(Basic(bot))

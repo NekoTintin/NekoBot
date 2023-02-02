@@ -30,6 +30,8 @@ class Reddit(commands.Cog):
         
     @app_commands.command(name="nekomimi", description="Affiche un post depuis r/Nekomimi.")
     async def nekomimi(self, interaction: discord.Interaction, nombre: values):
+        if not interaction.channel.is_nsfw():
+            return await interaction.response.send_message("Erreur: Cette commande ne fonctionne que dans un salon NSFW.", ephemeral=True)
         await interaction.response.defer(ephemeral=False)
         
         errors = 0
@@ -51,6 +53,8 @@ class Reddit(commands.Cog):
             
     @app_commands.command(name="nekohentai", description="Affiche un post de r/Nekohentai")
     async def nekohentai(self, interaction: discord.Interaction, nombre: values):
+        if not interaction.channel.is_nsfw():
+            return await interaction.response.send_message("Erreur: Cette commande ne fonctionne que dans un salon NSFW.", ephemeral=True)
         await interaction.response.defer(ephemeral=False)
         
         errors = 0
@@ -72,6 +76,8 @@ class Reddit(commands.Cog):
     
     @app_commands.command(name="nekopara", description="Affiche un post de r/Nekoparansfw")
     async def nekopara(self, interaction: discord.Interaction, nombre: values):
+        if not interaction.channel.is_nsfw():
+            return await interaction.response.send_message("Erreur: Cette commande ne fonctionne que dans un salon NSFW.", ephemeral=True)
         await interaction.response.defer(ephemeral=False)
         
         errors = 0

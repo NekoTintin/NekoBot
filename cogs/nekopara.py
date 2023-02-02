@@ -20,6 +20,8 @@ class Nekopara(commands.Cog):
         
     @app_commands.command(name="vanilla", description="Affiche une image de Vanilla.")
     async def vanilla(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
+        if not interaction.channel.is_nsfw():
+            return await interaction.response.send_message("Erreur: Cette commande ne fonctionne que dans un salon NSFW.", ephemeral=True)
         await interaction.response.defer(ephemeral=False)
         
         complete_tag = f"vanilla_(nekopara) {tag}"
@@ -48,6 +50,8 @@ class Nekopara(commands.Cog):
     
     @app_commands.command(name="chocola", description="Affiche une image de Chocola.")
     async def chocola(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
+        if not interaction.channel.is_nsfw():
+            return await interaction.response.send_message("Erreur: Cette commande ne fonctionne que dans un salon NSFW.", ephemeral=True)
         await interaction.response.defer(ephemeral=False)
         
         complete_tag = f"chocola_(nekopara) {tag}"
@@ -77,6 +81,8 @@ class Nekopara(commands.Cog):
             
     @app_commands.command(name="coconut", description="Affiche une image de Coconut.")
     async def coconut(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
+        if not interaction.channel.is_nsfw():
+            return await interaction.response.send_message("Erreur: Cette commande ne fonctionne que dans un salon NSFW.", ephemeral=True)
         await interaction.response.defer(ephemeral=False)
         
         complete_tag = f"coconut_(nekopara) {tag}"
@@ -104,6 +110,8 @@ class Nekopara(commands.Cog):
             
     @app_commands.command(name="maple", description="Affiche une image de Maple.")
     async def maple(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
+        if not interaction.channel.is_nsfw():
+            return await interaction.response.send_message("Erreur: Cette commande ne fonctionne que dans un salon NSFW.", ephemeral=True)
         await interaction.response.defer(ephemeral=False)
         
         complete_tag = f"maple_(nekopara) {tag}"
@@ -131,6 +139,8 @@ class Nekopara(commands.Cog):
             
     @app_commands.command(name="cinnamon", description="Affiche une image de Cinnamon.")
     async def cinnamon(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
+        if not interaction.channel.is_nsfw():
+            return await interaction.response.send_message("Erreur: Cette commande ne fonctionne que dans un salon NSFW.", ephemeral=True)
         await interaction.response.defer(ephemeral=False)
         
         complete_tag = f"cinnamon_(nekopara) {tag}"
@@ -158,6 +168,8 @@ class Nekopara(commands.Cog):
             
     @app_commands.command(name="azuki", description="Affiche une image de Azuki.")
     async def azuki(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
+        if not interaction.channel.is_nsfw():
+            return await interaction.response.send_message("Erreur: Cette commande ne fonctionne que dans un salon NSFW.", ephemeral=True)
         await interaction.response.defer(ephemeral=False)
         
         complete_tag = f"azuki_(nekopara) {tag}"

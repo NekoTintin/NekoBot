@@ -20,6 +20,8 @@ class Honkai(commands.Cog):
         
     @app_commands.command(name="pardofelis", description="Affiche une image de Pardofelis.")
     async def pardofelis(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
+        if not interaction.channel.is_nsfw():
+            return await interaction.response.send_message("Erreur: Cette commande ne fonctionne que dans un salon NSFW.", ephemeral=True)
         await interaction.response.defer(ephemeral=False)
         
         complete_tag = f"pardofelis_(honkai_impact) {tag}"
