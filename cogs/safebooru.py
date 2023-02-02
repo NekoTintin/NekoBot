@@ -31,7 +31,7 @@ class Safebooru(commands.Cog):
                 msg_color = discord.Color.from_str(f"#{secrets.token_hex(3)}")
                 msg = Embed(title="Recherche:", description="Une image de Neko SFW.", color=msg_color)
                 msg.set_image(url=image['file_url'])
-                msg.set_footer(text=f"Depuis Safebooru - ID {image['id']}", icon_url="https://danbooru.donmai.us/packs/static/images/danbooru-logo-128x128-ea111b6658173e847734.png")
+                msg.set_footer(text=f"Depuis Safebooru - ID {image['id']}", icon_url="https://i.pinimg.com/564x/1b/8a/82/1b8a82e579861ec8a0bfac7f378e2cce.jpg")
         
                 view = Posts_Button()
                 view.add_item(discord.ui.Button(label="Lien vers l'image", style=discord.ButtonStyle.link, url=image['file_url']))
