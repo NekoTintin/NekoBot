@@ -18,10 +18,8 @@ class DanbooruCog(commands.Cog):
         self.bot = bot
         super().__init__()
         
-    @app_commands.command(name="randomneko", description="Affiche une image de Neko depuis Danbooru")
+    @app_commands.command(name="randomneko", description="Affiche une image de Neko depuis Danbooru", nsfw=True)
     async def dan(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
-        if not interaction.channel.is_nsfw():
-            return await interaction.response.send_message("Erreur: Cette commande ne fonctionne que dans un salon NSFW.", ephemeral=True)
         await interaction.response.defer(ephemeral=False)
         
         full_tag = f"cat_girl {tag}"

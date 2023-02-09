@@ -18,10 +18,8 @@ class Princess_connect(commands.Cog):
         self.bot = bot
         super().__init__()
 
-    @app_commands.command(name="kiaru", description="Affiche une image de Kiaru.")
+    @app_commands.command(name="kiaru", description="Affiche une image de Kiaru.", nsfw=True)
     async def kiaru(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
-        if not interaction.channel.is_nsfw():
-            return await interaction.response.send_message("Erreur: Cette commande ne fonctionne que dans un salon NSFW.", ephemeral=True)
         await interaction.response.defer(ephemeral=False)
         
         complete_tag = f"karyl_(princess_connect!) {tag}"

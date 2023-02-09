@@ -18,7 +18,7 @@ class Safebooru(commands.Cog):
         self.bot = bot
         super().__init__()
         
-    @app_commands.command(name="safeneko", description="Affiche une image depuis Safebooru.")
+    @app_commands.command(name="safeneko", description="Affiche une image depuis Safebooru.", )
     async def safeneko(self, interaction: discord.Interaction, nombre: values, tags: str = ""):
         await interaction.response.defer(ephemeral=False)
         

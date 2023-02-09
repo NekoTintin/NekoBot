@@ -12,16 +12,14 @@ from cogs.download import Posts_Button
 
 dan = Danbooru('danbooru', username="Kiri-chan27", api_key=pswd.danbooru_api)
 
-class Xenoblade(commands.Cog):
+class Xenoblade(commands.GroupCog, name="xenoblade"):
     
-    def __init__(self, bot) -> None:
+    def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         super().__init__()
         
-    @app_commands.command(name="nia", description="Affiche une image de Nia.")
+    @app_commands.command(name="nia", description="Affiche une image de Nia.", nsfw=True)
     async def nia(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
-        if not interaction.channel.is_nsfw():
-            return await interaction.response.send_message("Erreur: Cette commande ne fonctionne que dans un salon NSFW.", ephemeral=True)
         await interaction.response.defer(ephemeral=False)
         
         complete_tag = f"Nia_(xenoblade) {tag}"
@@ -48,10 +46,8 @@ class Xenoblade(commands.Cog):
             await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
             
             
-    @app_commands.command(name="mio", description="Affiche une image de Mio.")
+    @app_commands.command(name="mio", description="Affiche une image de Mio.", nsfw=True)
     async def mio(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
-        if not interaction.channel.is_nsfw():
-            return await interaction.response.send_message("Erreur: Cette commande ne fonctionne que dans un salon NSFW.", ephemeral=True)
         await interaction.response.defer(ephemeral=False)
         
         complete_tag = f"mio_(xenoblade) {tag}"
@@ -77,5 +73,5 @@ class Xenoblade(commands.Cog):
         if errors > 0:
             await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
             
-async def setup(bot):
+async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(Xenoblade(bot))

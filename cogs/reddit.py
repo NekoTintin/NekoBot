@@ -21,17 +21,15 @@ wrapper = Red(
     # Pour éviter les messages d'Async PRAW
     check_for_async = False)
 
-class Reddit(commands.Cog):
+class Reddit(commands.GroupCog, name="reddit"):
     
-    def __init__(self, bot) -> None:
+    def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         super().__init__()
         
         
-    @app_commands.command(name="nekomimi", description="Affiche un post depuis r/Nekomimi.")
+    @app_commands.command(name="nekomimi", description="Affiche un post depuis r/Nekomimi.", nsfw=True)
     async def nekomimi(self, interaction: discord.Interaction, nombre: values):
-        if not interaction.channel.is_nsfw():
-            return await interaction.response.send_message("Erreur: Cette commande ne fonctionne que dans un salon NSFW.", ephemeral=True)
         await interaction.response.defer(ephemeral=False)
         
         errors = 0
@@ -51,10 +49,8 @@ class Reddit(commands.Cog):
             await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
             
             
-    @app_commands.command(name="nekohentai", description="Affiche un post de r/Nekohentai")
+    @app_commands.command(name="nekohentai", description="Affiche un post de r/Nekohentai", nsfw=True)
     async def nekohentai(self, interaction: discord.Interaction, nombre: values):
-        if not interaction.channel.is_nsfw():
-            return await interaction.response.send_message("Erreur: Cette commande ne fonctionne que dans un salon NSFW.", ephemeral=True)
         await interaction.response.defer(ephemeral=False)
         
         errors = 0
@@ -74,10 +70,8 @@ class Reddit(commands.Cog):
             await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
             
     
-    @app_commands.command(name="nekopara", description="Affiche un post de r/Nekoparansfw")
+    @app_commands.command(name="nekoparansfw", description="Affiche un post de r/NekoparaNSFW", nsfw=True)
     async def nekopara(self, interaction: discord.Interaction, nombre: values):
-        if not interaction.channel.is_nsfw():
-            return await interaction.response.send_message("Erreur: Cette commande ne fonctionne que dans un salon NSFW.", ephemeral=True)
         await interaction.response.defer(ephemeral=False)
         
         errors = 0
@@ -111,5 +105,5 @@ def get_post(sub: str) -> Embed:
     
     return msg
     
-async def setup(bot):
+async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(Reddit(bot))

@@ -12,16 +12,14 @@ from var import values
 
 dan = Danbooru('danbooru', username="Kiri-chan27", api_key=pswd.danbooru_api)
 
-class Nekopara(commands.Cog):
+class Nekopara(commands.GroupCog, name="nekopara"):
     
-    def __init__(self, bot) -> None:
+    def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         super().__init__()
         
-    @app_commands.command(name="vanilla", description="Affiche une image de Vanilla.")
+    @app_commands.command(name="vanilla", description="Affiche une image de Vanilla.", nsfw=True)
     async def vanilla(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
-        if not interaction.channel.is_nsfw():
-            return await interaction.response.send_message("Erreur: Cette commande ne fonctionne que dans un salon NSFW.", ephemeral=True)
         await interaction.response.defer(ephemeral=False)
         
         complete_tag = f"vanilla_(nekopara) {tag}"
@@ -48,10 +46,8 @@ class Nekopara(commands.Cog):
             await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
             
     
-    @app_commands.command(name="chocola", description="Affiche une image de Chocola.")
+    @app_commands.command(name="chocola", description="Affiche une image de Chocola.", nsfw=True)
     async def chocola(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
-        if not interaction.channel.is_nsfw():
-            return await interaction.response.send_message("Erreur: Cette commande ne fonctionne que dans un salon NSFW.", ephemeral=True)
         await interaction.response.defer(ephemeral=False)
         
         complete_tag = f"chocola_(nekopara) {tag}"
@@ -79,10 +75,8 @@ class Nekopara(commands.Cog):
             
             
             
-    @app_commands.command(name="coconut", description="Affiche une image de Coconut.")
+    @app_commands.command(name="coconut", description="Affiche une image de Coconut.", nsfw=True)
     async def coconut(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
-        if not interaction.channel.is_nsfw():
-            return await interaction.response.send_message("Erreur: Cette commande ne fonctionne que dans un salon NSFW.", ephemeral=True)
         await interaction.response.defer(ephemeral=False)
         
         complete_tag = f"coconut_(nekopara) {tag}"
@@ -108,10 +102,8 @@ class Nekopara(commands.Cog):
         if errors > 0:
             await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
             
-    @app_commands.command(name="maple", description="Affiche une image de Maple.")
+    @app_commands.command(name="maple", description="Affiche une image de Maple.", nsfw=True)
     async def maple(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
-        if not interaction.channel.is_nsfw():
-            return await interaction.response.send_message("Erreur: Cette commande ne fonctionne que dans un salon NSFW.", ephemeral=True)
         await interaction.response.defer(ephemeral=False)
         
         complete_tag = f"maple_(nekopara) {tag}"
@@ -137,10 +129,8 @@ class Nekopara(commands.Cog):
         if errors > 0:
             await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
             
-    @app_commands.command(name="cinnamon", description="Affiche une image de Cinnamon.")
+    @app_commands.command(name="cinnamon", description="Affiche une image de Cinnamon.", nsfw=True)
     async def cinnamon(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
-        if not interaction.channel.is_nsfw():
-            return await interaction.response.send_message("Erreur: Cette commande ne fonctionne que dans un salon NSFW.", ephemeral=True)
         await interaction.response.defer(ephemeral=False)
         
         complete_tag = f"cinnamon_(nekopara) {tag}"
@@ -166,10 +156,8 @@ class Nekopara(commands.Cog):
         if errors > 0:
             await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
             
-    @app_commands.command(name="azuki", description="Affiche une image de Azuki.")
+    @app_commands.command(name="azuki", description="Affiche une image de Azuki.", nsfw=True)
     async def azuki(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
-        if not interaction.channel.is_nsfw():
-            return await interaction.response.send_message("Erreur: Cette commande ne fonctionne que dans un salon NSFW.", ephemeral=True)
         await interaction.response.defer(ephemeral=False)
         
         complete_tag = f"azuki_(nekopara) {tag}"
