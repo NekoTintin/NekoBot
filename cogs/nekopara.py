@@ -3,10 +3,9 @@ from discord.ext import commands
 from discord import app_commands
 from discord.embeds import Embed
 
-import secrets
+from secrets import token_hex, SystemRandom
 import passwords as pswd
 from pybooru import Danbooru
-from random import choice
 from cogs.download import Posts_Button
 from var import values
 
@@ -16,6 +15,7 @@ class Nekopara(commands.GroupCog, name="nekopara"):
     
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
+        self.random = SystemRandom()
         super().__init__()
         
     @app_commands.command(name="vanilla", description="Affiche une image de Vanilla.", nsfw=True)
@@ -26,9 +26,9 @@ class Nekopara(commands.GroupCog, name="nekopara"):
         errors = 0
         for i in range(nombre):
             try:
-                image = choice(dan.post_list(tags=complete_tag, limit=5000))
+                image = self.random.choice(dan.post_list(tags=complete_tag, limit=5000))
                 
-                msg_color = discord.Color.from_str(f"#{secrets.token_hex(3)}")
+                msg_color = discord.Color.from_str(f"#{token_hex(3)}")
                 msg = Embed(title="Recherche:", description=f"Vanilla de Nekopara.", color=msg_color)
                 msg.set_image(url=image['file_url'])
                 msg.set_footer(text=f"Depuis Danbooru - ID {image['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=280&v=4")
@@ -54,9 +54,9 @@ class Nekopara(commands.GroupCog, name="nekopara"):
         errors = 0
         for i in range(nombre):
             try:
-                image = choice(dan.post_list(tags=complete_tag, limit=5000))
+                image = self.random.choice(dan.post_list(tags=complete_tag, limit=5000))
                 
-                msg_color = discord.Color.from_str(f"#{secrets.token_hex(3)}")
+                msg_color = discord.Color.from_str(f"#{token_hex(3)}")
                 msg = Embed(title="Recherche:", description=f"Chocola de Nekopara.", color=msg_color)
                 msg.set_image(url=image['file_url'])
                 msg.set_footer(text=f"Depuis Danbooru - ID {image['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=280&v=4")
@@ -83,9 +83,9 @@ class Nekopara(commands.GroupCog, name="nekopara"):
         errors = 0
         for i in range(nombre):
             try:
-                image = choice(dan.post_list(tags=complete_tag, limit=5000))
+                image = self.random.choice(dan.post_list(tags=complete_tag, limit=5000))
                 
-                msg_color = discord.Color.from_str(f"#{secrets.token_hex(3)}")
+                msg_color = discord.Color.from_str(f"#{token_hex(3)}")
                 msg = Embed(title="Recherche:", description=f"Coconut de Nekopara.", color=msg_color)
                 msg.set_image(url=image['file_url'])
                 msg.set_footer(text=f"Depuis Danbooru - ID {image['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=280&v=4")
@@ -110,9 +110,9 @@ class Nekopara(commands.GroupCog, name="nekopara"):
         errors = 0
         for i in range(nombre):
             try:
-                image = choice(dan.post_list(tags=complete_tag, limit=5000))
+                image = self.random.choice(dan.post_list(tags=complete_tag, limit=5000))
                 
-                msg_color = discord.Color.from_str(f"#{secrets.token_hex(3)}")
+                msg_color = discord.Color.from_str(f"#{token_hex(3)}")
                 msg = Embed(title="Recherche:", description=f"Maple de Nekopara.", color=msg_color)
                 msg.set_image(url=image['file_url'])
                 msg.set_footer(text=f"Depuis Danbooru - ID {image['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=280&v=4")
@@ -137,9 +137,9 @@ class Nekopara(commands.GroupCog, name="nekopara"):
         errors = 0
         for i in range(nombre):
             try:
-                image = choice(dan.post_list(tags=complete_tag, limit=5000))
+                image = self.random.choice(dan.post_list(tags=complete_tag, limit=5000))
                 
-                msg_color = discord.Color.from_str(f"#{secrets.token_hex(3)}")
+                msg_color = discord.Color.from_str(f"#{token_hex(3)}")
                 msg = Embed(title="Recherche:", description=f"Cinnamon de Nekopara.", color=msg_color)
                 msg.set_image(url=image['file_url'])
                 msg.set_footer(text=f"Depuis Danbooru - ID {image['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=280&v=4")
@@ -164,9 +164,9 @@ class Nekopara(commands.GroupCog, name="nekopara"):
         errors = 0
         for i in range(nombre):
             try:
-                image = choice(dan.post_list(tags=complete_tag, limit=5000))
+                image = self.random.choice(dan.post_list(tags=complete_tag, limit=5000))
                 
-                msg_color = discord.Color.from_str(f"#{secrets.token_hex(3)}")
+                msg_color = discord.Color.from_str(f"#{token_hex(3)}")
                 msg = Embed(title="Recherche:", description=f"Azuki de Nekopara.", color=msg_color)
                 msg.set_image(url=image['file_url'])
                 msg.set_footer(text=f"Depuis Danbooru - ID {image['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=280&v=4")

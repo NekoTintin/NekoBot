@@ -1,5 +1,5 @@
 import datetime as dt
-from random import choice
+from secrets import SystemRandom
 
 import passwords as pswd
 from discord.embeds import Embed
@@ -16,6 +16,7 @@ IST = timezone('Europe/Paris')
 class Buttons(discord.ui.View):
     
     def __init__(self, *, timeout = None):
+        self.random = SystemRandom()
         super().__init__(timeout=timeout)
     
     @discord.ui.button(label="Ajouter à la liste", style=discord.ButtonStyle.success, emoji="📝")
@@ -42,7 +43,7 @@ class Buttons(discord.ui.View):
             is_valid = False
             while is_valid == False:
                 try:
-                    image = choice(safe.post_list(tags="cat_girl -furry", limit=10000))
+                    image = self.random.choice(safe.post_list(tags="cat_girl -furry", limit=10000))
                     is_valid = True
                 except:
                     asyncio.sleep(3)
@@ -52,7 +53,7 @@ class Buttons(discord.ui.View):
             is_valid = False
             while is_valid == False:
                 try:
-                    image = choice(dan.post_list(tags="cat_girl nude", limit=10000))
+                    image = self.random.choice(dan.post_list(tags="cat_girl nude", limit=10000))
                     is_valid = True
                 except:
                     asyncio.sleep(3)
@@ -60,7 +61,7 @@ class Buttons(discord.ui.View):
         
         channel = interaction.channel
         
-        message = Embed(title=choice(var.titles_possibilities), description=choice(var.message_possibilities), color=0xFF5700)
+        message = Embed(title=self.random.choice(var.titles_possibilities), description=self.random.choice(var.message_possibilities), color=0xFF5700)
         message.set_footer(text=f"Depuis Danbooru - ID: {image['id']}", icon_url="https://danbooru.donmai.us/packs/static/images/danbooru-logo-128x128-ea111b6658173e847734.png")
         message.set_image(url=image['file_url'])
         
@@ -91,12 +92,12 @@ class Dailyneko(commands.Cog):
                 is_valid = False
                 while is_valid == False:
                     try:
-                        image = choice(self.safe.post_list(tags="cat_girl -furry", limit=10000))
+                        image = self.random.choice(self.safe.post_list(tags="cat_girl -furry", limit=10000))
                         is_valid = True
                     except:
                         continue
         
-                message = Embed(title=choice(var.titles_possibilities), description=choice(var.message_possibilities), color=0xFF5700)
+                message = Embed(title=self.random.choice(var.titles_possibilities), description=self.random.choice(var.message_possibilities), color=0xFF5700)
                 message.set_footer(text=f"Depuis Safebooru - ID: {image['id']}", icon_url="https://safebooru.org//samples/3249/sample_f6d42b7a58497b59d5db9205cc29703ead5f4425.jpg?3378314")
                 message.set_image(url=image['file_url'])
             
@@ -117,13 +118,13 @@ class Dailyneko(commands.Cog):
                 is_valid = False
                 while is_valid == False:
                     try:
-                        image = choice(self.dan.post_list(tags="cat_girl nude", limit=10000))
+                        image = self.random.choice(self.dan.post_list(tags="cat_girl nude", limit=10000))
                         is_valid = True
                     except:
                         continue
             
                 # Envoie du message Embed NSFW
-                message = Embed(title=choice(var.titles_possibilities), description=choice(var.message_possibilities), color=0xd97bda)
+                message = Embed(title=self.random.choice(var.titles_possibilities), description=self.random.choice(var.message_possibilities), color=0xd97bda)
                 message.set_footer(text=f"Depuis Danbooru - ID: {image['id']}", icon_url="https://danbooru.donmai.us/packs/static/images/danbooru-logo-128x128-ea111b6658173e847734.png")
                 message.set_image(url=image['file_url'])
                 

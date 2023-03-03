@@ -4,11 +4,10 @@ from discord.embeds import Embed
 from discord import app_commands
 
 from praw import Reddit as Red
-from secrets import token_hex
+from secrets import token_hex, SystemRandom
 import passwords as pwrd
 from var import values
 from cogs.download import Posts_Button
-from random import choice
 
 wrapper = Red(
     # ID pour s'identifier en tant que Bot sur Reddit
@@ -92,8 +91,9 @@ class Reddit(commands.GroupCog, name="reddit"):
             
 def get_post(sub: str) -> Embed:
     subreddit = wrapper.subreddit(sub)
-    
-    submission = choice(list(subreddit.hot(limit=650)))
+    random = SystemRandom
+
+    submission = random.choice(list(subreddit.hot(limit=650)))
     
     msg = Embed(title=submission.title, description="", color=discord.Color.from_str(f"#{token_hex(3)}"))
     msg.set_author(name=f"u/{submission.author}", icon_url=submission.author.icon_img)

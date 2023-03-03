@@ -4,8 +4,7 @@ from discord.embeds import Embed
 from discord import app_commands
 
 from pybooru import Danbooru
-from random import choice
-from secrets import token_hex
+from secrets import token_hex, SystemRandom
 import passwords as pswd
 from var import values
 from cogs.download import Posts_Button
@@ -16,6 +15,7 @@ class DanbooruCog(commands.Cog):
     
     def __init__(self, bot) -> None:
         self.bot = bot
+        self.random = SystemRandom()
         super().__init__()
         
     @app_commands.command(name="randomneko", description="Affiche une image de Neko depuis Danbooru", nsfw=True)
@@ -26,7 +26,7 @@ class DanbooruCog(commands.Cog):
         errors = 0
         for _ in range(nombre):
             try:
-                image = choice(dan.post_list(tags=full_tag, limit=5000))
+                image = self.random.choice(dan.post_list(tags=full_tag, limit=5000))
                 
                 msg_color = discord.Color.from_str(f'#{token_hex(3)}')
                 msg = Embed(title="Recherche:", description="Une image de Neko depuis Danbooru.", color=msg_color)

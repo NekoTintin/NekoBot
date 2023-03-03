@@ -1,7 +1,7 @@
 from typing import Literal
 
-version = "2.0.0"
-online_message = "Frites"
+version = "2.2.0"
+online_message = "Miaou !!!"
 
 # Dictionnaire qui stocke les cogs chargés
 loaded_ext = list()

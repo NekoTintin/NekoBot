@@ -5,8 +5,7 @@ from discord import app_commands
 
 from pybooru import Danbooru
 import passwords as pswd
-from random import choice
-import secrets
+from secrets import token_hex, SystemRandom
 from var import values
 from cogs.download import Posts_Button
 
@@ -16,6 +15,7 @@ class Princess_connect(commands.Cog):
 
     def __init__(self, bot) -> None:
         self.bot = bot
+        self.random = SystemRandom()
         super().__init__()
 
     @app_commands.command(name="kiaru", description="Affiche une image de Kiaru.", nsfw=True)
@@ -26,9 +26,9 @@ class Princess_connect(commands.Cog):
         errors = 0
         for _ in range(nombre):
             try:
-                image = choice(dan.post_list(tags=complete_tag, limit=5000))
+                image = self.random.choice(dan.post_list(tags=complete_tag, limit=5000))
                 
-                msg_color = discord.Color.from_str(f"#{secrets.token_hex(3)}")
+                msg_color = discord.Color.from_str(f"#{token_hex(3)}")
                 msg = Embed(title="Recherche:", description=f"Kiaru du jeu Princess Connect!", color=msg_color)
                 msg.set_image(url=image['file_url'])
                 msg.set_footer(text=f"Depuis Danbooru - ID {image['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=280&v=4")
