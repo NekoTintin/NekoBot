@@ -19,7 +19,7 @@ class Buttons(discord.ui.View):
         self.random = SystemRandom()
         super().__init__(timeout=timeout)
     
-    @discord.ui.button(label="Ajouter à la liste", style=discord.ButtonStyle.success, emoji="📝")
+    @discord.ui.button(label="Ajouter à ta liste", style=discord.ButtonStyle.success, emoji="📝")
     async def add_to_list(self, interaction: discord.Interaction, button: discord.ui.Button):
         id = interaction.user.id
         link = interaction.message.embeds[0].image.url
@@ -76,6 +76,7 @@ class Dailyneko(commands.Cog):
         self.bot = bot
         self.safe = Danbooru('safebooru', username="Kiri-chan27", api_key=pswd.danbooru_api)
         self.dan = Danbooru('danbooru', username="Kiri-chan27", api_key=pswd.danbooru_api)
+        self.random = SystemRandom()
         
         bot.loop.create_task(self.neko())
         bot.loop.create_task(self.nekonsfw())
@@ -88,7 +89,7 @@ class Dailyneko(commands.Cog):
         while not self.bot.is_closed():
             now = dt.datetime.now(IST)
             
-            if now.hour == 12 or now.hour == 23:
+            if now.hour == 12 or now.hour == 18:
                 is_valid = False
                 while is_valid == False:
                     try:
@@ -114,7 +115,7 @@ class Dailyneko(commands.Cog):
         while not self.bot.is_closed():
             now = dt.datetime.now(IST)
             
-            if now.hour == 12 or now.hour == 23:
+            if now.hour == 0 or now.hour == 6:
                 is_valid = False
                 while is_valid == False:
                     try:

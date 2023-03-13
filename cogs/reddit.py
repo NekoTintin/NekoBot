@@ -4,7 +4,7 @@ from discord.embeds import Embed
 from discord import app_commands
 
 from praw import Reddit as Red
-from secrets import token_hex, SystemRandom
+from secrets import token_hex
 import passwords as pwrd
 from var import values
 from cogs.download import Posts_Button
@@ -13,7 +13,7 @@ wrapper = Red(
     # ID pour s'identifier en tant que Bot sur Reddit
     client_id = pwrd.reddit_id,
     client_secret = pwrd.reddit_secret,
-    user_agent = "discord.py:Nekobot:v2.0.0(by u/tintin361yt)",
+    user_agent = "discord.py:Nekobot:v2.2.1(by u/tintin361yt)",
     # ID du compte Reddit
     username = "Kirlia-chan",
     password = pwrd.reddit_password,
@@ -47,7 +47,7 @@ class Reddit(commands.GroupCog, name="reddit"):
         if errors > 0:
             await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
             
-            
+    """
     @app_commands.command(name="nekohentai", description="Affiche un post de r/Nekohentai", nsfw=True)
     async def nekohentai(self, interaction: discord.Interaction, nombre: values):
         await interaction.response.defer(ephemeral=False)
@@ -55,7 +55,7 @@ class Reddit(commands.GroupCog, name="reddit"):
         errors = 0
         for _ in range(nombre):
             try:
-                message = get_post("Nekohentai")
+                message = get_post("NekoHentai")
                 
                 view = Posts_Button()
                 view.add_item(discord.ui.Button(label="Lien vers le post", style=discord.ButtonStyle.link, url=message.image.url))
@@ -67,6 +67,7 @@ class Reddit(commands.GroupCog, name="reddit"):
             
         if errors > 0:
             await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
+    """
             
     
     @app_commands.command(name="nekoparansfw", description="Affiche un post de r/NekoparaNSFW", nsfw=True)
@@ -90,18 +91,15 @@ class Reddit(commands.GroupCog, name="reddit"):
             await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
             
 def get_post(sub: str) -> Embed:
-    subreddit = wrapper.subreddit(sub)
-    random = SystemRandom
+    submission = wrapper.subreddit(sub).random()
 
-    submission = random.choice(list(subreddit.hot(limit=650)))
-    
     msg = Embed(title=submission.title, description="", color=discord.Color.from_str(f"#{token_hex(3)}"))
     msg.set_author(name=f"u/{submission.author}", icon_url=submission.author.icon_img)
     msg.set_image(url=submission.url)
     msg.set_footer(text=f"Depuis {sub} - ID: {submission.id}", icon_url="https://www.elementaryos-fr.org/wp-content/uploads/2019/08/logo-reddit.png")
     if sub == "Nekomimi":
         return msg
-    msg.set_thumbnail(url=subreddit.icon_img)
+    msg.set_thumbnail(url=wrapper.subreddit(sub).icon_img)
     
     return msg
     
