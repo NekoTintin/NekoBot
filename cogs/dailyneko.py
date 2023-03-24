@@ -44,6 +44,7 @@ class Buttons(discord.ui.View):
             while is_valid == False:
                 try:
                     image = self.random.choice(safe.post_list(tags="cat_girl -furry", limit=10000))
+                    icon = "https://safebooru.org//samples/3249/sample_f6d42b7a58497b59d5db9205cc29703ead5f4425.jpg?3378314"
                     is_valid = True
                 except:
                     asyncio.sleep(3)
@@ -54,6 +55,7 @@ class Buttons(discord.ui.View):
             while is_valid == False:
                 try:
                     image = self.random.choice(dan.post_list(tags="cat_girl nude", limit=10000))
+                    icon = "https://avatars.githubusercontent.com/u/57931572?s=280&v=4"
                     is_valid = True
                 except:
                     asyncio.sleep(3)
@@ -62,7 +64,7 @@ class Buttons(discord.ui.View):
         channel = interaction.channel
         
         message = Embed(title=self.random.choice(var.titles_possibilities), description=self.random.choice(var.message_possibilities), color=0xFF5700)
-        message.set_footer(text=f"Depuis Danbooru - ID: {image['id']}", icon_url="https://danbooru.donmai.us/packs/static/images/danbooru-logo-128x128-ea111b6658173e847734.png")
+        message.set_footer(text=f"Depuis Danbooru - ID: {image['id']}", icon_url=icon)
         message.set_image(url=image['file_url'])
         
         view = Buttons()
@@ -126,7 +128,7 @@ class Dailyneko(commands.Cog):
             
                 # Envoie du message Embed NSFW
                 message = Embed(title=self.random.choice(var.titles_possibilities), description=self.random.choice(var.message_possibilities), color=0xd97bda)
-                message.set_footer(text=f"Depuis Danbooru - ID: {image['id']}", icon_url="https://danbooru.donmai.us/packs/static/images/danbooru-logo-128x128-ea111b6658173e847734.png")
+                message.set_footer(text=f"Depuis Danbooru - ID: {image['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=280&v=4")
                 message.set_image(url=image['file_url'])
                 
                 view = Buttons()

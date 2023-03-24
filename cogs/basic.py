@@ -63,17 +63,17 @@ class Basic(commands.Cog):
     @app_commands.command(name="proxynekodad", description="Le papa de Proxy, oui oui !")
     async def proxy(self, interaction: discord.Interaction) -> None:
         img = discord.File("/home/Tintin/discord_bot/Kiri-chan/images/proxydad.png")
-        await interaction.response.send_message("Proxy's dad be like:", file=img)
+        await interaction.response.send_message(content="Proxy's dad be like:", file=img)
         
     # Affiche la version du Bot
     @app_commands.command(name="version", description="Affiche la version du NekoBot.")
     async def ver(self, interaction: discord.Integration) -> None:
-        await interaction.response.send_message(f"Je suis en en version **{var.version}**.")
+        await interaction.response.send_message(content=f"Je suis en en version **{var.version}**.", ephemeral=True)
         
     # Envoie le Lien du Github du Bot
     @app_commands.command(name="github", description="Récupère le lien mon repo Github.")
     async def git(self, interaction: discord.Interaction) -> None:
-        await interaction.response.send_message(f"Lien du repo: https://github.com/Tintin361/NekoBot")
+        await interaction.response.send_message(content=f"Lien du repo: https://github.com/Tintin361/NekoBot", ephemeral=True)
         
     
 async def setup(bot):
