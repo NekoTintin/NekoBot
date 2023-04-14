@@ -128,7 +128,6 @@ class Dailyneko(commands.Cog):
                         continue
             
                 # Envoie du message Embed NSFW
-                print(str(image))
                 message = Embed(title=self.random.choice(var.titles_possibilities), description=self.random.choice(var.message_possibilities), color=0xd97bda)
                 message.set_footer(text=f"Depuis Danbooru - ID: {image['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=280&v=4")
                 message.set_image(url=image['file_url'])
@@ -137,7 +136,7 @@ class Dailyneko(commands.Cog):
                 view.add_item(discord.ui.Button(label="Lien vers l'image", style=discord.ButtonStyle.link, url=image['file_url']))
                 
                 await channel.send(embed=message, view=view)
-            await asyncio.sleep(3)
+            await asyncio.sleep(3600)
     
 async def setup(bot):
     await bot.add_cog(Dailyneko(bot))
