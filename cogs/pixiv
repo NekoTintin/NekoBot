@@ -5,7 +5,6 @@ from discord import app_commands
 import passwords as pswd
 import var
 
-
 class Pixiv(commands.Cog):
     
     def __init__(self, bot) -> None:
@@ -20,17 +19,13 @@ class Pixiv(commands.Cog):
         errors = 0
         for _ in range(nombre):
             try:
-                
-                
+                pass
             except:
                 errors += 1
                 continue
             
         if errors > 0:
             await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
-        
-        
-        
         
 async def setup(bot):
     await bot.add_cog(Pixiv(bot))
