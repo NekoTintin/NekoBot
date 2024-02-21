@@ -7,7 +7,7 @@ from os import makedirs, listdir, remove, path
 import urllib.request
 import zipfile
 
-list_path = "/home/Tintin/discord_bot/NekoBot/data"
+list_path = "/home/tintin/discord_bot/NekoBot/data"
 
 class Posts_Button(discord.ui.View):
     
@@ -20,7 +20,7 @@ class Posts_Button(discord.ui.View):
         link = interaction.message.embeds[0].image.url
         
         try:
-            with open(f"/home/Tintin/discord_bot/NekoBot/data/{id}.txt", "a") as file:
+            with open(f"/home/tintin/discord_bot/NekoBot/data/{id}.txt", "a") as file:
                 file.write(f"{link}\n")
             await interaction.response.send_message("✅ Ajouté à ta liste !", delete_after=15, ephemeral=True)
             return
@@ -83,7 +83,7 @@ class Download(commands.Cog):
             await interaction.response.send_message("Ta liste ne contient aucune image.", ephemeral=True)
             
         msg = Embed(title=f"Liste de: {interaction.user.display_name}", description="")
-        msg.set_footer(text="Nekobot", icon_url="https://images-ext-1.discordapp.net/external/SC2OmN2b0t2QlraDbClwZC6SG67oiBB7Ap67BCkVc30/%3Fsize%3D4096%26ignore%3Dtrue/https/cdn.discordapp.com/avatars/857707035147108352/ec9f08b8f677eb5dee3f5d950fec22b9.png?width=634&height=634")
+        msg.set_footer(text="Nekobot", icon_url=self.bot.user.display_avatar)
         with open(f"{list_path}/{interaction.user.id}.txt", "r") as file:
             lines = file.readlines()
             for num, line in enumerate(lines):

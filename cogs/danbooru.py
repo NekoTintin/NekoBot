@@ -11,6 +11,9 @@ from cogs.download import Posts_Button
 
 dan = Danbooru('danbooru', username="Kiri-chan27", api_key=pswd.danbooru_api)
 
+def danTemplate():
+    pass
+
 class DanbooruCog(commands.Cog):
     
     def __init__(self, bot) -> None:

@@ -25,7 +25,7 @@ class Buttons(discord.ui.View):
         link = interaction.message.embeds[0].image.url
         
         try:
-            with open(f"/home/Tintin/discord_bot/NekoBot/data/{id}.txt", "a") as file:
+            with open(f"/home/tintin/discord_bot/NekoBot/data/{id}.txt", "a") as file:
                 file.write(f"{link}\n")    
             await interaction.response.send_message("✅ Ajouté à ta liste !", delete_after=15, ephemeral=True)
             return

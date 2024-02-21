@@ -62,7 +62,7 @@ class Basic(commands.Cog):
     # Affiche une photo du Papa de Proxy
     @app_commands.command(name="proxynekodad", description="Le papa de Proxy, oui oui !")
     async def proxy(self, interaction: discord.Interaction) -> None:
-        img = discord.File("/home/Tintin/discord_bot/Kiri-chan/images/proxydad.png")
+        img = discord.File("/home/tintin/discord_bot/Kiri-chan/images/proxydad.png")
         await interaction.response.send_message(content="Proxy's dad be like:", file=img)
         
     # Affiche la version du Bot
