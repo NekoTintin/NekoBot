@@ -13,7 +13,7 @@ wrapper = Red(
     # ID pour s'identifier en tant que Bot sur Reddit
     client_id = pwrd.reddit_id,
     client_secret = pwrd.reddit_secret,
-    user_agent = "discord.py:Nekobot:v2.3.0(by u/tintin361yt)",
+    user_agent = "discord.py:Nekobot:v2.4.0(by u/tintin361yt)",
     # ID du compte Reddit
     username = "Kirlia-chan",
     password = pwrd.reddit_password,

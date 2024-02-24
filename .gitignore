@@ -49,3 +49,4 @@ data
 data/*
 .gitignore
 cogs/pixiv.txt
+paths

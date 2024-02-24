@@ -6,6 +6,7 @@ import asyncio
 import var
 
 import passwords
+import path
 
 version = var.version
 online_message = var.online_message
@@ -28,7 +29,7 @@ def get_modules() -> list:
 @bot.command()
 async def startup(bot):
     async with bot:
-        for filename in os.listdir('/home/tintin/discord_bot/NekoBot/cogs'):
+        for filename in os.listdir(path.cogs_path):
             if filename.endswith(".py") and filename != "reactions.py":
                 await bot.load_extension(f'cogs.{filename[:-3]}')
         await bot.start(passwords.token)

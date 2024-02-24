@@ -10,6 +10,8 @@ from pybooru import Danbooru
 from pytz import timezone
 import asyncio
 import var
+from path import data_path
+from os import path, mkdir
 
 IST = timezone('Europe/Paris')
 
@@ -25,13 +27,13 @@ class Buttons(discord.ui.View):
         link = interaction.message.embeds[0].image.url
         
         try:
-            with open(f"/home/tintin/discord_bot/NekoBot/data/{id}.txt", "a") as file:
-                file.write(f"{link}\n")    
-            await interaction.response.send_message("✅ Ajouté à ta liste !", delete_after=15, ephemeral=True)
-            return
+            if not path.exists(f"{data_path}{id}"):
+                mkdir(f"{data_path}{id}")
+            with open(f"{data_path}{id}/list.txt", "a") as file:
+                file.write(f"{link}\n")
+            return await interaction.response.send_message("✅ Ajouté à ta liste !", delete_after=15, ephemeral=True)
         except:
-            await interaction.response.send_message("❌ Impossible de l'ajouter à la liste...", delete_after=15, ephemeral=True)
-            return
+            return await interaction.response.send_message("❌ Impossible de l'ajouter à la liste...", delete_after=15, ephemeral=True)
         
         
     @discord.ui.button(label="Une autre !", style=discord.ButtonStyle.danger, emoji="🔁")
@@ -91,7 +93,7 @@ class Dailyneko(commands.Cog):
         while not self.bot.is_closed():
             now = dt.datetime.now(IST)
             
-            if now.hour == 12:
+            if now.hour == 0:
                 is_valid = False
                 while is_valid == False:
                     try:
