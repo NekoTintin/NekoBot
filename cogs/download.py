@@ -192,7 +192,7 @@ class Download(commands.Cog):
     
     @app_commands.command(name="nekolist", description="Affiche ta liste de tes images.")
     async def nekolist(self, react: discord.Interaction):
-        if not path.exists(f"{data_path}{react.user.id}/list.txt"):
+        if not path.exists(f"{data_path}{react.user.id}/list.txt")  or path.getsize(f"{data_path}{react.user.id}/list.txt") == 0:
             return await react.response.send_message("Ta liste ne contient aucune image.", ephemeral=True)
         
         img_list = load_file(f"{data_path}{react.user.id}/list.txt")
