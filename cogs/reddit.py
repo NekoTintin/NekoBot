@@ -13,7 +13,7 @@ wrapper = Red(
     # ID pour s'identifier en tant que Bot sur Reddit
     client_id = pwrd.reddit_id,
     client_secret = pwrd.reddit_secret,
-    user_agent = "discord.py:Nekobot:v2.4.0(by u/tintin361yt)",
+    user_agent = "discord.py:Nekobot:v2.5.0(by u/tintin361yt)",
     # ID du compte Reddit
     username = "Kirlia-chan",
     password = pwrd.reddit_password,
@@ -34,49 +34,7 @@ class Reddit(commands.GroupCog, name="reddit"):
         errors = 0
         for _ in range(nombre):
             try:
-                message = get_post("Nekomimi")
-                
-                view = Posts_Button()
-                view.add_item(discord.ui.Button(label="Lien vers le post", style=discord.ButtonStyle.link, url=message.image.url))
-                
-                await interaction.followup.send(embed=message, view=view, ephemeral=False)
-            except:
-                errors += 1
-                continue
-            
-        if errors > 0:
-            await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
-    
-    
-    @app_commands.command(name="nekomimi18", description="Affiche un post de r/Nekomimi18plus", nsfw=True)
-    async def _nekomimi18(self, interaction: discord.Interaction, nombre: values):
-        await interaction.response.defer(ephemeral=False)
-        
-        errors = 0
-        for _ in range(nombre):
-            try:
-                message = get_post("Nekomimi18plus")
-                
-                view = Posts_Button()
-                view.add_item(discord.ui.Button(label="Lien vers le post", style=discord.ButtonStyle.link, url=message.image.url))
-                
-                await interaction.followup.send(embed=message, view=view, ephemeral=False)
-            except:
-                errors += 1
-                continue
-            
-        if errors > 0:
-            await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
-    
-    
-    @app_commands.command(name="nekogirl", description="Affiche un post de r/NekoGirl", nsfw=True)
-    async def _nekogirl(self, interaction: discord.Interaction, nombre: values):
-        await interaction.response.defer(ephemeral=False)
-        
-        errors = 0
-        for _ in range(nombre):
-            try:
-                message = get_post("NekoGirl")
+                message = get_post("nekomimi")
                 
                 view = Posts_Button()
                 view.add_item(discord.ui.Button(label="Lien vers le post", style=discord.ButtonStyle.link, url=message.image.url))
@@ -97,7 +55,7 @@ class Reddit(commands.GroupCog, name="reddit"):
         errors = 0
         for _ in range(nombre):
             try:
-                message = get_post("BasilicaOfNia")
+                message = get_post("basilicaofnia")
                 
                 view = Posts_Button()
                 view.add_item(discord.ui.Button(label="Lien vers le post", style=discord.ButtonStyle.link, url=message.image.url))
@@ -109,29 +67,7 @@ class Reddit(commands.GroupCog, name="reddit"):
             
         if errors > 0:
             await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
-    
-    """
-    @app_commands.command(name="nekohentai", description="Affiche un post de r/Nekohentai", nsfw=True)
-    async def nekohentai(self, interaction: discord.Interaction, nombre: values):
-        await interaction.response.defer(ephemeral=False)
-        
-        errors = 0
-        for _ in range(nombre):
-            try:
-                message = get_post("NekoHentai")
-                
-                view = Posts_Button()
-                view.add_item(discord.ui.Button(label="Lien vers le post", style=discord.ButtonStyle.link, url=message.image.url))
-                
-                await interaction.followup.send(embed=message, view=view, ephemeral=False)
-            except:
-                errors += 1
-                continue
-            
-        if errors > 0:
-            await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
-    """
-            
+
     
     @app_commands.command(name="nekoparansfw", description="Affiche un post de r/NekoparaNSFW", nsfw=True)
     async def _nekopara(self, interaction: discord.Interaction, nombre: values):
@@ -153,14 +89,18 @@ class Reddit(commands.GroupCog, name="reddit"):
         if errors > 0:
             await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
             
+
 def get_post(sub: str) -> Embed:
     submission = wrapper.subreddit(sub).random()
 
     msg = Embed(title=submission.title, description="", color=discord.Color.from_str(f"#{token_hex(3)}"))
-    msg.set_author(name=f"u/{submission.author}", icon_url=submission.author.icon_img)
+    if submission.author.icon_img != None:
+        msg.set_author(name=f"u/{submission.author}", icon_url=submission.author.icon_img)
+    else:
+        msg.set_author(name=f"u/{submission.author}")
     msg.set_image(url=submission.url)
     msg.set_footer(text=f"Depuis {sub} - ID: {submission.id}", icon_url="https://www.elementaryos-fr.org/wp-content/uploads/2019/08/logo-reddit.png")
-    if sub == "Nekomimi":
+    if sub == "nekomimi":
         return msg
     msg.set_thumbnail(url=wrapper.subreddit(sub).icon_img)
     

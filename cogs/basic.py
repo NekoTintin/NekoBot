@@ -27,7 +27,7 @@ class Basic(commands.Cog):
         await ctx.message.delete()
         await self.bot.load_extension(f"cogs.{extention}")
         var.add_module(extention)
-        await ctx.send(f"Le module {extention} à bien été chargé")
+        await ctx.send(f"Le module {extention} a bien été chargé")
         
     # Permet de décharger un cog
     @commands.command(name="unload")
@@ -35,7 +35,7 @@ class Basic(commands.Cog):
         await ctx.message.delete()
         await self.bot.unload_extension(f"cogs.{extention}")
         var.remove_module(extention)
-        await ctx.send(f"Le module {extention} à bien été déchargé")
+        await ctx.send(f"Le module {extention} a bien été déchargé")
         
     # Permet de recharger un cog
     @commands.command(name="reload")
@@ -43,7 +43,7 @@ class Basic(commands.Cog):
         await ctx.message.delete()
         await self.bot.unload_extension(f"cogs.{extention}")
         await self.bot.load_extension(f"cogs.{extention}")
-        await ctx.send(f"Le module {extention} à bien été rechargé")
+        await ctx.send(f"Le module {extention} a bien été rechargé")
         
     # Envoie un message avec la liste des modules chargés
     @commands.command(name="modules", aliases=['mod'])

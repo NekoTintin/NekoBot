@@ -1,6 +1,6 @@
 from typing import Literal
 
-version = "2.4.0"
+version = "2.5.0"
 online_message = "Nya Nya Nya ???"
 
 # Dictionnaire qui stocke les cogs chargés
@@ -21,7 +21,7 @@ def remove_module(name):
     
     
 # Liste des titles pour le DailyNeko
-titles_possibilities = ["NEKO TIME !", "DailyNeko en action !", "Un manque de Waifu ?", "C'est l'heure !", "Letzgongue !", "C'est Tipar !", "Oh no", "Wanna some Neko ?", "Une Neko sauvage apparaît !"]
+titles_possibilities = ["NEKO TIME !", "DailyNeko en action !", "Un manque de Waifu ?", "C'est l'heure !", "Letzgongue !", "C'est Tipar !", "Oh no", "Une Neko sauvage apparaît !"]
 
 # Liste des messages pour le DailyNeko
 message_possibilities = ["Voici ta Neko du jour !", "C'est toujours important de combler les manques de Neko.", ]

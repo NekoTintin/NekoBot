@@ -73,5 +73,33 @@ class Xenoblade(commands.GroupCog, name="xenoblade"):
         if errors > 0:
             await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
             
+            
+    @app_commands.command(name="nael", description="Affiche une image de Na'el.", nsfw=True)
+    async def nael(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
+        await interaction.response.defer(ephemeral=False)
+        
+        complete_tag = f"Na'el_(xenoblade) {tag}"
+        errors = 0
+        for _ in range(nombre):
+            try:
+                image = self.random.choice(dan.post_list(tags=complete_tag, limit=5000))
+                
+                msg_color = discord.Color.from_str(f"#{token_hex(3)}")
+                msg = Embed(title="Recherche:", description=f"Na'el de Xenoblade Chronicles.", color=msg_color)
+                msg.set_image(url=image['file_url'])
+                msg.set_footer(text=f"Depuis Danbooru - ID {image['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=280&v=4")
+                msg.set_thumbnail(url="https://static.wikia.nocookie.net/xenoblade/images/2/21/Na%27el_crop.png/revision/latest?cb=20230419021919")
+
+                view = Posts_Button()
+                view.add_item(discord.ui.Button(label="Lien vers l'image", style=discord.ButtonStyle.link, url=image['file_url']))
+            
+                await interaction.followup.send(embed=msg, view=view, ephemeral=False)
+            except:
+                errors += 1
+                continue
+        
+        if errors > 0:
+            await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
+            
 async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(Xenoblade(bot))
