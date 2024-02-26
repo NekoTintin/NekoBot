@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from discord.embeds import Embed
-from discord import app_commands, ButtonStyle, SelectOption
+from discord import app_commands, ButtonStyle
 from discord.ui import button, Button, View, Select
 
 from os import listdir, remove, path, mkdir
@@ -107,7 +107,6 @@ class Image_Viewer():
                 self.link_list = load_file(f"{data_path}{react.user.id}/list.txt")
                 self.curall-=1
                 self.current_in_selectoption-=1
-                self.current_in_selectoption = 0
                 msg = self._get_message(creation=True)
                 return await react.message.edit(embed=msg[0], view=msg[1])
         
