@@ -50,7 +50,7 @@ class Image_Viewer():
     def _create_select_list(self, link_list: list, start_num: int) -> dict:
         select_list = []
         for num, link in enumerate(link_list):
-            select_list.append(discord.SelectOption(label=f"Élément {start_num+num+1}", description=link, emoji="🖼️"))
+            select_list.append(discord.SelectOption(label=f"Élément {start_num+num+1}", description=link[:100], emoji="🖼️"))
         if self.pagecur > 0:
             select_list.append(discord.SelectOption(label=f"Page précédente", emoji="⬅️"))
         if self.pagecur < self.page_max:
@@ -212,7 +212,7 @@ def delete_link(file_path, link_to_delete) -> bool:
             lines = f.readlines()
         
         # Supprimer le lien spécifié s'il existe dans la liste
-        lines = [line.strip() for line in lines if line.strip() != link_to_delete]
+        lines.pop(lines.index(link_to_delete + '\n'))
 
         with open(file_path, 'w') as f:
             f.writelines('\n'.join(lines))
