@@ -1,6 +1,6 @@
 from typing import Literal
 
-version = "2.5.2"
+version = "2.5.3"
 online_message = "Nya Nya Nya ???"
 
 # Dictionnaire qui stocke les cogs chargés

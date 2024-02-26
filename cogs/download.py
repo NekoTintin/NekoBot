@@ -102,10 +102,14 @@ class Image_Viewer():
             if self.max <= 1:
                 # Cas où il n'y a plus de liens dans la liste
                 await react.message.delete()
-                await react.followup.send("Il n'y a plus d'images dans ta liste, le lecteur d'image s'est fermé.", ephemeral=True)
+                return await react.followup.send("Il n'y a plus d'images dans ta liste, le lecteur d'image s'est fermé.", ephemeral=True)
             else:
+                self.link_list = load_file(f"{data_path}{react.user.id}/list.txt")
+                self.curall-=1
+                self.current_in_selectoption-=1
+                self.current_in_selectoption = 0
                 msg = self._get_message(creation=True)
-                await react.message.edit(embed=msg[0], view=msg[1])
+                return await react.message.edit(embed=msg[0], view=msg[1])
         
         async def quit_callback(react: discord.Interaction):
             return await react.message.delete()
