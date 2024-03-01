@@ -122,7 +122,7 @@ def search_on_danbooru(title: str, desc: str, search: str, num_of_query: int, ra
     errors = 0
     for _ in range(num_of_query):
         try:
-            img = _create_request({"tags": f"{search}rating:{','.join(rating_list)}"})
+            img = _create_request({"tags": f"{search} rating:{','.join(rating_list)}"})
             if img == []:
                 errors+=1
                 continue
