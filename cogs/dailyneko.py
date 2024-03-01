@@ -1,24 +1,35 @@
-import datetime as dt
-from secrets import SystemRandom
-
-import passwords as pswd
+import discord
 from discord.embeds import Embed
 from discord.ext import commands
-import discord
 
-from pybooru import Danbooru
+import datetime as dt
 from pytz import timezone
 import asyncio
-import var
 from path import data_path
 from os import path, mkdir
+from random import SystemRandom
+import requests
+
+import passwords as pswd
+import var
+
+rating_dict = { "g": "General", "s": "Sensitive", "q": "Questionable", "e": "Explicit" }
+
+def _create_request(tags: str) -> dict:
+    headers = { "Accept": "application/json" }
+    resp = requests.get("https://danbooru.donmai.us/posts/random", params=tags, headers=headers)
+    
+    if resp.status_code == 200:
+        return resp.json()
+    else:
+        return None
+
 
 IST = timezone('Europe/Paris')
 
 class Buttons(discord.ui.View):
     
     def __init__(self, *, timeout = None):
-        self.random = SystemRandom()
         super().__init__(timeout=timeout)
     
     @discord.ui.button(label="Ajouter à ta liste", style=discord.ButtonStyle.success, emoji="📝")
@@ -35,38 +46,29 @@ class Buttons(discord.ui.View):
         except:
             return await interaction.response.send_message("❌ Impossible de l'ajouter à la liste...", delete_after=15, ephemeral=True)
         
-        
     @discord.ui.button(label="Une autre !", style=discord.ButtonStyle.danger, emoji="🔁")
     async def repeat(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.message.delete()
         
+        tags = {}
         if interaction.channel_id == 986006452848169041:
-            safe = Danbooru('safebooru', username="Kiri-chan27", api_key=pswd.danbooru_api)
-            is_valid = False
-            while is_valid == False:
-                try:
-                    image = self.random.choice(safe.post_list(tags="cat_girl -furry", limit=10000))
-                    icon = "https://safebooru.org//samples/3249/sample_f6d42b7a58497b59d5db9205cc29703ead5f4425.jpg?3378314"
-                    is_valid = True
-                except:
-                    asyncio.sleep(3)
-                    continue
+            tags = {"tags": "cat_ears rating:g,s"}
         else:
-            dan = Danbooru('danbooru', username="Kiri-chan27", api_key=pswd.danbooru_api)
-            is_valid = False
-            while is_valid == False:
-                try:
-                    image = self.random.choice(dan.post_list(tags="cat_girl nude", limit=10000))
-                    icon = "https://avatars.githubusercontent.com/u/57931572?s=280&v=4"
-                    is_valid = True
-                except:
-                    asyncio.sleep(3)
-                    continue
+            tags = {"tags": "cat_ears rating:q,e"}
+        
+        is_valid = False
+        while is_valid == False:
+            try:
+                image = _create_request(tags)
+                is_valid = True
+            except:
+                asyncio.sleep(3)
+                continue
         
         channel = interaction.channel
         
-        message = Embed(title=self.random.choice(var.titles_possibilities), description=self.random.choice(var.message_possibilities), color=0xFF5700)
-        message.set_footer(text=f"Depuis Danbooru - ID: {image['id']}", icon_url=icon)
+        message = Embed(title=SystemRandom().choice(var.titles_possibilities), description=SystemRandom().choice(var.message_possibilities), color=0xFF5700)
+        message.set_footer(text=f"ID: {image['id']} - Rating {rating_dict[image['rating']]}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=200&v=4")
         message.set_image(url=image['file_url'])
         
         view = Buttons()
@@ -78,32 +80,28 @@ class Buttons(discord.ui.View):
 class Dailyneko(commands.Cog):
     def __init__(self, bot) -> None:
         self.bot = bot
-        self.safe = Danbooru('safebooru', username="Kiri-chan27", api_key=pswd.danbooru_api)
-        self.dan = Danbooru('danbooru', username="Kiri-chan27", api_key=pswd.danbooru_api)
-        self.random = SystemRandom()
-        
-        bot.loop.create_task(self.neko())
-        bot.loop.create_task(self.nekonsfw())
-        
-    async def neko(self):
-        # Attends que le bot soit prêt
+        bot.loop.create_task(self._dailyneko())
+        bot.loop.create_task(self._nsfwneko())
+            
+    async def _dailyneko(self):
         await self.bot.wait_until_ready()
-        channel = self.bot.get_channel(986006452848169041)
+        channel = self.bot.get_channel(pswd.dailyneko_channel_id)
         
         while not self.bot.is_closed():
             now = dt.datetime.now(IST)
+            requests
             
-            if now.hour == 0 or now.hour == 12:
+            if now.hour == 12 or now.hour == 18:
                 is_valid = False
                 while is_valid == False:
                     try:
-                        image = self.random.choice(self.safe.post_list(tags="cat_girl -furry", limit=10000))
+                        image = _create_request({"tags": "cat_ears rating:g,s"})
                         is_valid = True
                     except:
                         continue
         
-                message = Embed(title=self.random.choice(var.titles_possibilities), description=self.random.choice(var.message_possibilities), color=0xFF5700)
-                message.set_footer(text=f"Depuis Safebooru - ID: {image['id']}", icon_url="https://safebooru.org//samples/3249/sample_f6d42b7a58497b59d5db9205cc29703ead5f4425.jpg?3378314")
+                message = Embed(title=SystemRandom().choice(var.titles_possibilities), description=SystemRandom().choice(var.message_possibilities), color=0xFF5700)
+                message.set_footer(text=f"ID: {image['id']} - Rating {rating_dict[image['rating']]}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=200&v=4")
                 message.set_image(url=image['file_url'])
             
                 view = Buttons()
@@ -111,29 +109,28 @@ class Dailyneko(commands.Cog):
                 
                 await channel.send(embed=message, view=view)
             await asyncio.sleep(3600)
-
-    async def nekonsfw(self):
+            
+    async def _nsfwneko(self):
         await self.bot.wait_until_ready()
-        channel = self.bot.get_channel(1015743434331521044)
+        channel = self.bot.get_channel(pswd.nsfwneko_channel_id)
         
         while not self.bot.is_closed():
             now = dt.datetime.now(IST)
+            requests
             
-            if now.hour == 0 or now.hour == 12:
+            if now.hour == 0 or now.hour == 6:
                 is_valid = False
                 while is_valid == False:
                     try:
-                        image = self.random.choice(self.dan.post_list(tags="cat_girl nude", limit=10000))
-                        if image.get("file_url", None) != None:
-                            is_valid = True
+                        image = _create_request({"tags": "cat_ears rating:q,e"})
+                        is_valid = True
                     except:
                         continue
-            
-                # Envoie du message Embed NSFW
-                message = Embed(title=self.random.choice(var.titles_possibilities), description=self.random.choice(var.message_possibilities), color=0xd97bda)
-                message.set_footer(text=f"Depuis Danbooru - ID: {image['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=280&v=4")
+        
+                message = Embed(title=SystemRandom().choice(var.titles_possibilities), description=SystemRandom().choice(var.message_possibilities), color=0xFF5700)
+                message.set_footer(text=f"ID: {image['id']} - Rating {rating_dict[image['rating']]}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=200&v=4")
                 message.set_image(url=image['file_url'])
-                
+            
                 view = Buttons()
                 view.add_item(discord.ui.Button(label="Lien vers l'image", style=discord.ButtonStyle.link, url=image['file_url']))
                 

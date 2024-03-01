@@ -5,27 +5,36 @@ from discord import app_commands
 import passwords as pswd
 import var
 
-class Pixiv(commands.Cog):
+from pixivapi import Client, SearchTarget, Sort
+
+client = Client(language="english")
+client.authenticate(pswd.pixiv_refresh_token)
+
+class Pixiv(commands.GroupCog, group_name="pixiv"):
     
     def __init__(self, bot) -> None:
         self.bot = bot
         super().__init__()
         
-    @app_commands.command(name="pixiv", description="Affiche une image de Neko depuis Pixiv.")
-    async def pix(self, interaction: discord.Interaction, nombre: var.values, tags: str = ""):
-        await interaction.response.defer()
+    @app_commands.command(name="last", description="Affiche une image de Neko depuis Pixiv.")
+    async def newest(self, react: discord.Interaction, nombre: var.values, tags: str = ""):
+        await react.response.defer(thinking=True)
         
         full_tag = f"nekomimi {tags}"
         errors = 0
         for _ in range(nombre):
             try:
-                pass
+                dict = client.search_illustrations(word=full_tag,
+                    search_target=SearchTarget.TAGS_PARTIAL,
+                    sort=Sort.DATE_ASC, offset=200)
+                
+                await react.followup.send(str(dict)[:2000])
             except:
                 errors += 1
                 continue
             
         if errors > 0:
-            await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
+            await react.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
         
 async def setup(bot):
     await bot.add_cog(Pixiv(bot))

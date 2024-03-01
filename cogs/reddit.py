@@ -13,7 +13,7 @@ wrapper = Red(
     # ID pour s'identifier en tant que Bot sur Reddit
     client_id = pwrd.reddit_id,
     client_secret = pwrd.reddit_secret,
-    user_agent = "discord.py:Nekobot:v2.5.3(by u/tintin361yt)",
+    user_agent = "discord.py:Nekobot:v2.6.0(by u/tintin361yt)",
     # ID du compte Reddit
     username = "Kirlia-chan",
     password = pwrd.reddit_password,
@@ -28,8 +28,11 @@ class Reddit(commands.GroupCog, name="reddit"):
         
         
     @app_commands.command(name="nekomimi", description="Affiche un post depuis r/Nekomimi.", nsfw=True)
-    async def _nekomimi(self, interaction: discord.Interaction, nombre: values):
-        await interaction.response.defer(ephemeral=False)
+    async def _nekomimi(self, react: discord.Interaction, nombre: values):
+        await self.bot.wait_until_ready()
+        await react.response.defer(ephemeral=False)
+        if not react.channel.is_nsfw():
+            return await react.followup.send("Cette commande peut envoyer du contenu NSFW, envoie-la dans un salon ou il est activé.")
         
         errors = 0
         for _ in range(nombre):
@@ -39,18 +42,21 @@ class Reddit(commands.GroupCog, name="reddit"):
                 view = Posts_Button()
                 view.add_item(discord.ui.Button(label="Lien vers le post", style=discord.ButtonStyle.link, url=message.image.url))
                 
-                await interaction.followup.send(embed=message, view=view, ephemeral=False)
+                await react.followup.send(embed=message, view=view, ephemeral=False)
             except:
                 errors += 1
                 continue
             
         if errors > 0:
-            await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
+            await react.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
             
     
     @app_commands.command(name="nia", description="Affiche un post de r/BasilicaOfNia", nsfw=True)
-    async def _basilica_of_nia(self, interaction: discord.Interaction, nombre: values):
-        await interaction.response.defer(ephemeral=False)
+    async def _basilica_of_nia(self, react: discord.Interaction, nombre: values):
+        await self.bot.wait_until_ready()
+        await react.response.defer(ephemeral=False)
+        if not react.channel.is_nsfw():
+            return await react.followup.send("Cette commande peut envoyer du contenu NSFW, envoie-la dans un salon ou il est activé.")
         
         errors = 0
         for _ in range(nombre):
@@ -60,18 +66,21 @@ class Reddit(commands.GroupCog, name="reddit"):
                 view = Posts_Button()
                 view.add_item(discord.ui.Button(label="Lien vers le post", style=discord.ButtonStyle.link, url=message.image.url))
                 
-                await interaction.followup.send(embed=message, view=view, ephemeral=False)
+                await react.followup.send(embed=message, view=view, ephemeral=False)
             except:
                 errors += 1
                 continue
             
         if errors > 0:
-            await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
+            await react.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
 
     
     @app_commands.command(name="nekoparansfw", description="Affiche un post de r/NekoparaNSFW", nsfw=True)
-    async def _nekopara(self, interaction: discord.Interaction, nombre: values):
-        await interaction.response.defer(ephemeral=False)
+    async def _nekopara(self, react: discord.Interaction, nombre: values):
+        await self.bot.wait_until_ready()
+        await react.response.defer(ephemeral=False)
+        if not react.channel.is_nsfw():
+            return await react.followup.send("Cette commande peut envoyer du contenu NSFW, envoie-la dans un salon ou il est activé.")
         
         errors = 0
         for _ in range(nombre):
@@ -81,13 +90,13 @@ class Reddit(commands.GroupCog, name="reddit"):
                 view = Posts_Button()
                 view.add_item(discord.ui.Button(label="Lien vers le post", style=discord.ButtonStyle.link, url=message.image.url))
                 
-                await interaction.followup.send(embed=message, view=view, ephemeral=False)
+                await react.followup.send(embed=message, view=view, ephemeral=False)
             except:
                 errors += 1
                 continue
             
         if errors > 0:
-            await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
+            await react.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
             
 
 def get_post(sub: str) -> Embed:

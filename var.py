@@ -1,10 +1,10 @@
 from typing import Literal
 
-version = "2.5.3"
-online_message = "Nya Nya Nya ???"
+version = "2.6.0"
+online_message = "Nya Nya Nya mais genre 2.0 !"
 
 # Dictionnaire qui stocke les cogs chargés
-loaded_ext = list
+loaded_ext = []
 
 # Fonction pour obtenir les modules chargés
 def get_modules() -> list:
@@ -28,3 +28,8 @@ message_possibilities = ["Voici ta Neko du jour !", "C'est toujours important de
 
 # Liste des valeurs pour les commandes
 values = Literal[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 40, 50]
+nsfw_values = { True: ["explicit", "questionable"], False: ["general", "sensitive"] }
+
+# Images pour les footer
+safebooru_icon = "https://i.pinimg.com/564x/1b/8a/82/1b8a82e579861ec8a0bfac7f378e2cce.jpg"
+danbooru_icon = "https://avatars.githubusercontent.com/u/57931572?s=280&v=4"

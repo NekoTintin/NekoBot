@@ -45,14 +45,6 @@ class Basic(commands.Cog):
         await self.bot.load_extension(f"cogs.{extention}")
         await ctx.send(f"Le module {extention} a bien été rechargé")
         
-    # Envoie un message avec la liste des modules chargés
-    @commands.command(name="modules", aliases=['mod'])
-    async def modules(self, ctx):
-        message = f"Liste des modules chargés:\n"
-        for mod in var.get_modules():
-            message += f"- *{mod}*\n"
-        await ctx.send(message)
-        
     # Pour synchroniser les commandes slash
     @commands.command(name="sync")
     async def sync(self, ctx) -> None:

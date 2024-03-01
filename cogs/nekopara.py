@@ -1,187 +1,128 @@
 import discord
 from discord.ext import commands
 from discord import app_commands
-from discord.embeds import Embed
 
-from secrets import token_hex, SystemRandom
-import passwords as pswd
-from pybooru import Danbooru
-from cogs.download import Posts_Button
-from var import values
+import utils.danbooru_utils as dan_utils
+from var import values, nsfw_values
 
-dan = Danbooru('danbooru', username="Kiri-chan27", api_key=pswd.danbooru_api)
-
-class Nekopara(commands.GroupCog, name="nekopara"):
+class Nekopara(commands.GroupCog, group_name="nekopara"):
     
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
-        self.random = SystemRandom()
         super().__init__()
         
     @app_commands.command(name="vanilla", description="Affiche une image de Vanilla.", nsfw=True)
-    async def vanilla(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
-        await interaction.response.defer(ephemeral=False)
+    async def vanilla(self, react: discord.Interaction, nombre: values, nsfw: bool, tag: str = ""):
+        await self.bot.wait_until_ready()
+        await react.response.defer(ephemeral=False)
         
-        complete_tag = f"vanilla_(nekopara) {tag}"
-        errors = 0
-        for i in range(nombre):
-            try:
-                image = self.random.choice(dan.post_list(tags=complete_tag, limit=5000))
-                
-                msg_color = discord.Color.from_str(f"#{token_hex(3)}")
-                msg = Embed(title="Recherche:", description=f"Vanilla de Nekopara.", color=msg_color)
-                msg.set_image(url=image['file_url'])
-                msg.set_footer(text=f"Depuis Danbooru - ID {image['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=280&v=4")
-                msg.set_thumbnail(url="https://pbs.twimg.com/media/EHStm4yUcAAIgFe?format=png&name=small")
-
-                view = Posts_Button()
-                view.add_item(discord.ui.Button(label="Lien vers l'image", style=discord.ButtonStyle.link, url=image['file_url']))
-            
-                await interaction.followup.send(embed=msg, view=view, ephemeral=False)
-            except:
-                errors += 1
-                continue
+        if nsfw and not react.channel.is_nsfw():
+            return await react.followup.send("Pour afficher du NSFW, mets-toi dans un salon NSFW.")
         
-        if errors > 0:
-            await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
-            
+        try:
+            result = dan_utils.search_on_danbooru("Recherche:", "Une image de Vanilla du jeu Nekopara.", f"vanilla_(nekopara) {tag}", nombre, nsfw_values[nsfw])
+        except:
+            return await react.followup.send("Aucun résultat n'a été trouvé...")
+        
+        if result is None:
+            return await react.followup.send("Danbooru ne permet pas de faire des recherches de plus de 2 tags (**vanilla_(nekopara)** est intégré de base).")
+        
+        await react.followup.send(embed=result[0], view=result[1])
     
+            
     @app_commands.command(name="chocola", description="Affiche une image de Chocola.", nsfw=True)
-    async def chocola(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
-        await interaction.response.defer(ephemeral=False)
+    async def chocola(self, react: discord.Interaction, nombre: values, nsfw:bool, tag: str = ""):
+        await self.bot.wait_until_ready()
+        await react.response.defer(ephemeral=False)
         
-        complete_tag = f"chocola_(nekopara) {tag}"
-        errors = 0
-        for i in range(nombre):
-            try:
-                image = self.random.choice(dan.post_list(tags=complete_tag, limit=5000))
-                
-                msg_color = discord.Color.from_str(f"#{token_hex(3)}")
-                msg = Embed(title="Recherche:", description=f"Chocola de Nekopara.", color=msg_color)
-                msg.set_image(url=image['file_url'])
-                msg.set_footer(text=f"Depuis Danbooru - ID {image['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=280&v=4")
-                msg.set_thumbnail(url="https://i.pinimg.com/564x/07/84/0e/07840edacdd1ab489bce6efe9ff0e599.jpg")
-
-                view = Posts_Button()
-                view.add_item(discord.ui.Button(label="Lien vers l'image", style=discord.ButtonStyle.link, url=image['file_url']))
-            
-                await interaction.followup.send(embed=msg, view=view, ephemeral=False)
-            except:
-                errors += 1
-                continue
+        if nsfw and not react.channel.is_nsfw():
+            return await react.followup.send("Pour afficher du NSFW, mets-toi dans un salon NSFW.")
         
-        if errors > 0:
-            await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
-            
-            
+        try:
+            result = dan_utils.search_on_danbooru("Recherche:", "Une image de Chocola du jeu Nekopara.", f"chocola_(nekopara) {tag}", nombre, nsfw_values[nsfw])
+        except:
+            return await react.followup.send("Aucun résultat n'a été trouvé...")
+        
+        if result is None:
+            return await react.followup.send("Danbooru ne permet pas de faire des recherches de plus de 2 tags (**chocola_(nekopara)** est intégré de base).")
+        
+        await react.followup.send(embed=result[0], view=result[1])
+    
             
     @app_commands.command(name="coconut", description="Affiche une image de Coconut.", nsfw=True)
-    async def coconut(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
-        await interaction.response.defer(ephemeral=False)
+    async def coconut(self, react: discord.Interaction, nombre: values, nsfw: bool, tag: str = ""):
+        await self.bot.wait_until_ready()
+        await react.response.defer(ephemeral=False)
         
-        complete_tag = f"coconut_(nekopara) {tag}"
-        errors = 0
-        for i in range(nombre):
-            try:
-                image = self.random.choice(dan.post_list(tags=complete_tag, limit=5000))
-                
-                msg_color = discord.Color.from_str(f"#{token_hex(3)}")
-                msg = Embed(title="Recherche:", description=f"Coconut de Nekopara.", color=msg_color)
-                msg.set_image(url=image['file_url'])
-                msg.set_footer(text=f"Depuis Danbooru - ID {image['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=280&v=4")
-                msg.set_thumbnail(url="https://i.pinimg.com/564x/06/da/9d/06da9d1b176d43704a4333af04764d0c.jpg")
-
-                view = Posts_Button()
-                view.add_item(discord.ui.Button(label="Lien vers l'image", style=discord.ButtonStyle.link, url=image['file_url']))
-            
-                await interaction.followup.send(embed=msg, view=view)
-            except:
-                errors += 1
-                continue
+        if nsfw and not react.channel.is_nsfw():
+            return await react.followup.send("Pour afficher du NSFW, mets-toi dans un salon NSFW.")
         
-        if errors > 0:
-            await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
+        try:
+            result = dan_utils.search_on_danbooru("Recherche:", "Une image de Coconut du jeu Nekopara.", f"coconut_(nekopara) {tag}", nombre, nsfw_values[nsfw])
+        except:
+            return await react.followup.send("Aucun résultat n'a été trouvé...")
+        
+        if result is None:
+            return await react.followup.send("Danbooru ne permet pas de faire des recherches de plus de 2 tags (**coconut_(nekopara)** est intégré de base).")
+        
+        await react.followup.send(embed=result[0], view=result[1])
+    
             
     @app_commands.command(name="maple", description="Affiche une image de Maple.", nsfw=True)
-    async def maple(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
-        await interaction.response.defer(ephemeral=False)
+    async def maple(self, react: discord.Interaction, nombre: values, nsfw: bool, tag: str = ""):
+        await self.bot.wait_until_ready()
+        await react.response.defer(ephemeral=False)
         
-        complete_tag = f"maple_(nekopara) {tag}"
-        errors = 0
-        for i in range(nombre):
-            try:
-                image = self.random.choice(dan.post_list(tags=complete_tag, limit=5000))
-                
-                msg_color = discord.Color.from_str(f"#{token_hex(3)}")
-                msg = Embed(title="Recherche:", description=f"Maple de Nekopara.", color=msg_color)
-                msg.set_image(url=image['file_url'])
-                msg.set_footer(text=f"Depuis Danbooru - ID {image['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=280&v=4")
-                msg.set_thumbnail(url="https://i.pinimg.com/564x/a1/42/4e/a1424e2e0031b38771264916f46a9368.jpg")
-
-                view = Posts_Button()
-                view.add_item(discord.ui.Button(label="Lien vers l'image", style=discord.ButtonStyle.link, url=image['file_url']))
-            
-                await interaction.followup.send(embed=msg, view=view)
-            except:
-                errors += 1
-                continue
+        if nsfw and not react.channel.is_nsfw():
+            return await react.followup.send("Pour afficher du NSFW, mets-toi dans un salon NSFW.")
         
-        if errors > 0:
-            await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
+        try:
+            result = dan_utils.search_on_danbooru("Recherche:", "Une image de Maple du jeu Nekopara.", f"maple_(nekopara) {tag}", nombre, nsfw_values[nsfw])
+        except:
+            return await react.followup.send("Aucun résultat n'a été trouvé...")
+        
+        if result is None:
+            return await react.followup.send("Danbooru ne permet pas de faire des recherches de plus de 2 tags (**maple_(nekopara)** est intégré de base).")
+        
+        await react.followup.send(embed=result[0], view=result[1])
+    
             
     @app_commands.command(name="cinnamon", description="Affiche une image de Cinnamon.", nsfw=True)
-    async def cinnamon(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
-        await interaction.response.defer(ephemeral=False)
+    async def cinnamon(self, react: discord.Interaction, nombre: values, nsfw: bool, tag: str = ""):
+        await self.bot.wait_until_ready()
+        await react.response.defer(ephemeral=False)
         
-        complete_tag = f"cinnamon_(nekopara) {tag}"
-        errors = 0
-        for i in range(nombre):
-            try:
-                image = self.random.choice(dan.post_list(tags=complete_tag, limit=5000))
-                
-                msg_color = discord.Color.from_str(f"#{token_hex(3)}")
-                msg = Embed(title="Recherche:", description=f"Cinnamon de Nekopara.", color=msg_color)
-                msg.set_image(url=image['file_url'])
-                msg.set_footer(text=f"Depuis Danbooru - ID {image['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=280&v=4")
-                msg.set_thumbnail(url="https://www.nautiljon.com/images/perso/00/26/cinnamon_16162.webp?1578938713")
-
-                view = Posts_Button()
-                view.add_item(discord.ui.Button(label="Lien vers l'image", style=discord.ButtonStyle.link, url=image['file_url']))
+        if nsfw and not react.channel.is_nsfw():
+            return await react.followup.send("Pour afficher du NSFW, mets-toi dans un salon NSFW.")
+        
+        try:
+            result = dan_utils.search_on_danbooru("Recherche:", "Une image de Cinnamon du jeu Nekopara.", f"cinnamon_(nekopara) {tag}", nombre, nsfw_values[nsfw])
+        except:
+            return await react.followup.send("Aucun résultat n'a été trouvé...")
+        
+        if result is None:
+            return await react.followup.send("Danbooru ne permet pas de faire des recherches de plus de 2 tags (**cinnamon_(nekopara)** est intégré de base).")
+        
+        await react.followup.send(embed=result[0], view=result[1])
             
-                await interaction.followup.send(embed=msg, view=view)
-            except:
-                errors += 1
-                continue
-        
-        if errors > 0:
-            await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
             
     @app_commands.command(name="azuki", description="Affiche une image de Azuki.", nsfw=True)
-    async def azuki(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
-        await interaction.response.defer(ephemeral=False)
+    async def azuki(self, react: discord.Interaction, nombre: values, nsfw: bool, tag: str = ""):
+        await self.bot.wait_until_ready()
+        await react.response.defer(ephemeral=False)
         
-        complete_tag = f"azuki_(nekopara) {tag}"
-        errors = 0
-        for i in range(nombre):
-            try:
-                image = self.random.choice(dan.post_list(tags=complete_tag, limit=5000))
-                
-                msg_color = discord.Color.from_str(f"#{token_hex(3)}")
-                msg = Embed(title="Recherche:", description=f"Azuki de Nekopara.", color=msg_color)
-                msg.set_image(url=image['file_url'])
-                msg.set_footer(text=f"Depuis Danbooru - ID {image['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=280&v=4")
-                msg.set_thumbnail(url="https://wallpapercave.com/uwp/uwp1024376.jpeg")
-
-                view = Posts_Button()
-                view.add_item(discord.ui.Button(label="Lien vers l'image", style=discord.ButtonStyle.link, url=image['file_url']))
-            
-                await interaction.followup.send(embed=msg, view=view)
-            except:
-                errors += 1
-                continue
+        if nsfw and not react.channel.is_nsfw():
+            return await react.followup.send("Pour afficher du NSFW, mets-toi dans un salon NSFW.")
         
-        if errors > 0:
-            await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
+        try:
+            result = dan_utils.search_on_danbooru("Recherche:", "Une image de Azuki du jeu Nekopara.", f"azuki_(nekopara) {tag}", nombre, nsfw_values[nsfw])
+        except:
+            return await react.followup.send("Aucun résultat n'a été trouvé...")
+        
+        if result is None:
+            return await react.followup.send("Danbooru ne permet pas de faire des recherches de plus de 2 tags (**azuki_(nekopara)** est intégré de base).")
+        
+        await react.followup.send(embed=result[0], view=result[1])
             
 async def setup(bot):
     await bot.add_cog(Nekopara(bot))

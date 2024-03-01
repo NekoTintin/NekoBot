@@ -1,49 +1,33 @@
 import discord
 from discord.ext import commands
-from discord.embeds import Embed
 from discord import app_commands
 
-from pybooru import Danbooru
-import passwords as pswd
-from secrets import token_hex, SystemRandom
-from var import values
-from cogs.download import Posts_Button
-
-dan = Danbooru('danbooru', username="Kiri-chan27", api_key=pswd.danbooru_api)
+import utils.danbooru_utils as dan_utils
+from var import values, nsfw_values
 
 class Honkai(commands.Cog):
     
     def __init__(self, bot) -> None:
         self.bot = bot
-        self.random = SystemRandom()
         super().__init__()
         
     @app_commands.command(name="pardofelis", description="Affiche une image de Pardofelis.", nsfw=True)
-    async def pardofelis(self, interaction: discord.Interaction, nombre: values, tag: str = ""):
-        await interaction.response.defer(ephemeral=False)
+    async def pardofelis(self, react: discord.Interaction, nombre: values, nsfw: bool, tag: str = ""):
+        await self.bot.wait_until_ready()
+        await react.response.defer(ephemeral=False)
         
-        complete_tag = f"pardofelis_(honkai_impact) {tag}"
-        errors = 0
-        for i in range(nombre):
-            try:
-                image = self.random.choice(dan.post_list(tags=complete_tag, limit=5000))
-                
-                msg_color = discord.Color.from_str(f"#{token_hex(3)}")
-                msg = Embed(title="Recherche:", description=f"Pardofelis du jeu Honkai Impact 3rd.", color=msg_color)
-                msg.set_image(url=image['file_url'])
-                msg.set_footer(text=f"Depuis Danbooru - ID {image['id']}", icon_url="https://avatars.githubusercontent.com/u/57931572?s=280&v=4")
-                msg.set_thumbnail(url="https://cdn.donmai.us/sample/a6/c1/__pardofelis_honkai_and_1_more_drawn_by_mi_si_lei_da_ke__sample-a6c1535e504de8c2b1da0e2a00b0112d.jpg")
+        if nsfw and not react.channel.is_nsfw():
+            return await react.followup.send("Pour afficher du NSFW, mets-toi dans un salon NSFW.")
+        
+        try:
+            result = dan_utils.search_on_danbooru("Recherche:", "Une image de Pardofelis d'Honkai Impact 3rd.", f"pardofelis_(honkai_impact) {tag}", nombre, nsfw_values[nsfw])
+        except:
+            return await react.followup.send("Aucun résultat n'a été trouvé...")
+        
+        if result is None:
+            return await react.followup.send("Danbooru ne permet pas de faire des recherches de plus de 2 tags (**pardofelis_(honkai_impact)** est intégré de base).")
+        
+        await react.followup.send(embed=result[0], view=result[1])
 
-                view = Posts_Button()
-                view.add_item(discord.ui.Button(label="Lien vers l'image", style=discord.ButtonStyle.link, url=image['file_url']))
-            
-                await interaction.followup.send(embed=msg, view=view, ephemeral=False)
-            except:
-                errors += 1
-                continue
-        
-        if errors > 0:
-            await interaction.followup.send(content=f"Nombre d'images qui n'ont pas pu être affichées: {errors}.", ephemeral=True)
-        
 async def setup(bot):
     await bot.add_cog(Honkai(bot))
