@@ -6,14 +6,14 @@ from discord import app_commands
 from praw import Reddit as Red
 from secrets import token_hex
 import passwords as pwrd
-from var import values
+from var import values, version
 from cogs.download import Posts_Button
 
 wrapper = Red(
     # ID pour s'identifier en tant que Bot sur Reddit
     client_id = pwrd.reddit_id,
     client_secret = pwrd.reddit_secret,
-    user_agent = "discord.py:Nekobot:v2.6.0(by u/tintin361yt)",
+    user_agent = f"discord.py:Nekobot:v{version}(by u/tintin361yt)",
     # ID du compte Reddit
     username = "Kirlia-chan",
     password = pwrd.reddit_password,
