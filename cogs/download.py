@@ -68,7 +68,6 @@ class Image_Viewer():
         view = View(timeout=None)
         
         select_menu = Select(
-            
             placeholder="Choisis une image",
             max_values=1,
             min_values=1,
