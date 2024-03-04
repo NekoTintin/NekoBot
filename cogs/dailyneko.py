@@ -80,7 +80,7 @@ class Buttons(discord.ui.View):
 class Dailyneko(commands.Cog):
     def __init__(self, bot) -> None:
         self.bot = bot
-        #bot.loop.create_task(self._dailyneko())
+        bot.loop.create_task(self._dailyneko())
         bot.loop.create_task(self._nsfwneko())
             
     async def _dailyneko(self):
