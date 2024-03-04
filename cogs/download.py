@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from discord.embeds import Embed
-from discord import app_commands, ButtonStyle
+from discord import SelectOption, app_commands, ButtonStyle
 from discord.ui import button, Button, View, Select
 
 from os import listdir, remove, path, mkdir
@@ -33,7 +33,7 @@ class Image_Viewer():
             self.page_dict = self._create_dict()
             self.max = len(self.link_list)
         self.current_list = self.page_dict[self.pagecur]
-        self.curlink = self.page_dict[self.pagecur][self.current_in_selectoption].description
+        self.curlink = self.link_list[self.curall]
         self.embed = self._create_embed()
         self.view = self._create_view()
         return [self.embed, self.view]
@@ -50,7 +50,11 @@ class Image_Viewer():
     def _create_select_list(self, link_list: list, start_num: int) -> dict:
         select_list = []
         for num, link in enumerate(link_list):
-            select_list.append(discord.SelectOption(label=f"Élément {start_num+num+1}", description=link[:100], emoji="🖼️"))
+            if num == self.current_in_selectoption:
+                is_default = True
+            else:
+                is_default = False
+            select_list.append(discord.SelectOption(label=f"Élément {start_num+num+1}", description=link[:100], emoji="🖼️", default=is_default))
         if self.pagecur > 0:
             select_list.append(discord.SelectOption(label=f"Page précédente", emoji="⬅️"))
         if self.pagecur < self.page_max:
@@ -58,12 +62,13 @@ class Image_Viewer():
         return select_list
         
     def _create_embed(self):
-        return Embed(title=f"📋 [{self.curall+1}/{self.max}] - Liste de {self.user.display_name}", description=None, color=self.user.color).set_image(url=self.curlink)
+        return Embed(title=f"📋 **[{self.curall+1}/{self.max}]** - Liste de {self.user.display_name}", description=None, color=self.user.color).set_image(url=self.curlink)
     
     def _create_view(self) -> View:
         view = View(timeout=None)
         
         select_menu = Select(
+            
             placeholder="Choisis une image",
             max_values=1,
             min_values=1,
@@ -211,11 +216,10 @@ def delete_link(file_path, link_to_delete) -> bool:
         with open(file_path, "r") as f:
             lines = f.readlines()
         
-        # Supprimer le lien spécifié s'il existe dans la liste
-        lines.pop(lines.index(link_to_delete + '\n'))
+        lines.remove(link_to_delete + "\n")
 
         with open(file_path, 'w') as f:
-            f.writelines('\n'.join(lines))
+            f.writelines(''.join(lines))
         return True
     except:
         return False

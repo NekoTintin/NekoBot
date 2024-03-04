@@ -28,6 +28,7 @@ class DanbooruCog(commands.Cog):
             return await react.followup.send("Danbooru ne permet pas de faire des recherches de plus de 2 tags (**cat_ears** est intégré de base).")
         
         await react.followup.send(embed=result[0], view=result[1])
+
         
 async def setup(bot):
     await bot.add_cog(DanbooruCog(bot))

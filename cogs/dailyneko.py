@@ -80,7 +80,7 @@ class Buttons(discord.ui.View):
 class Dailyneko(commands.Cog):
     def __init__(self, bot) -> None:
         self.bot = bot
-        bot.loop.create_task(self._dailyneko())
+        #bot.loop.create_task(self._dailyneko())
         bot.loop.create_task(self._nsfwneko())
             
     async def _dailyneko(self):
@@ -89,7 +89,6 @@ class Dailyneko(commands.Cog):
         
         while not self.bot.is_closed():
             now = dt.datetime.now(IST)
-            requests
             
             if now.hour == 12 or now.hour == 18:
                 is_valid = False
@@ -116,7 +115,6 @@ class Dailyneko(commands.Cog):
         
         while not self.bot.is_closed():
             now = dt.datetime.now(IST)
-            requests
             
             if now.hour == 0 or now.hour == 6:
                 is_valid = False
