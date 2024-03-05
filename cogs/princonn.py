@@ -11,7 +11,7 @@ class Princess_connect(commands.Cog):
         self.bot = bot
         super().__init__()
 
-    @app_commands.command(name="kiaru", description="Affiche une image de Kiaru.", nsfw=True)
+    @app_commands.command(name="kiaru", description="Affiche une image de Kiaru.")
     async def kiaru(self, react: discord.Interaction, nombre: values, nsfw: bool, tag: str = ""):
         await self.bot.wait_until_ready()
         await react.response.defer(ephemeral=False)

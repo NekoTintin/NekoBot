@@ -11,7 +11,7 @@ class Honkai(commands.Cog):
         self.bot = bot
         super().__init__()
         
-    @app_commands.command(name="pardofelis", description="Affiche une image de Pardofelis.", nsfw=True)
+    @app_commands.command(name="pardofelis", description="Affiche une image de Pardofelis.")
     async def pardofelis(self, react: discord.Interaction, nombre: values, nsfw: bool, tag: str = ""):
         await self.bot.wait_until_ready()
         await react.response.defer(ephemeral=False)

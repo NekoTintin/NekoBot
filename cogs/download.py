@@ -82,11 +82,13 @@ class Image_Viewer():
             if select_menu.values[0] == "Page précédente":
                 self.pagecur-=1
                 self.current_in_selectoption = -1
+                self.curall = self.pagecur*20
                 msg = self._get_message(creation=True)
                 await react.message.edit(embed=msg[0], view=msg[1])
             elif select_menu.values[0] == "Page suivante":
                 self.pagecur+=1
                 self.current_in_selectoption = -1
+                self.curall = self.pagecur*20
                 msg = self._get_message(creation=True)
                 await react.message.edit(embed=msg[0], view=msg[1])
             else:

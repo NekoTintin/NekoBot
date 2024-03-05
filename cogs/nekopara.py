@@ -11,7 +11,7 @@ class Nekopara(commands.GroupCog, group_name="nekopara"):
         self.bot = bot
         super().__init__()
         
-    @app_commands.command(name="vanilla", description="Affiche une image de Vanilla.", nsfw=True)
+    @app_commands.command(name="vanilla", description="Affiche une image de Vanilla.")
     async def vanilla(self, react: discord.Interaction, nombre: values, nsfw: bool, tag: str = ""):
         await self.bot.wait_until_ready()
         await react.response.defer(ephemeral=False)
@@ -30,7 +30,7 @@ class Nekopara(commands.GroupCog, group_name="nekopara"):
         await react.followup.send(embed=result[0], view=result[1])
     
             
-    @app_commands.command(name="chocola", description="Affiche une image de Chocola.", nsfw=True)
+    @app_commands.command(name="chocola", description="Affiche une image de Chocola.")
     async def chocola(self, react: discord.Interaction, nombre: values, nsfw:bool, tag: str = ""):
         await self.bot.wait_until_ready()
         await react.response.defer(ephemeral=False)
@@ -49,7 +49,7 @@ class Nekopara(commands.GroupCog, group_name="nekopara"):
         await react.followup.send(embed=result[0], view=result[1])
     
             
-    @app_commands.command(name="coconut", description="Affiche une image de Coconut.", nsfw=True)
+    @app_commands.command(name="coconut", description="Affiche une image de Coconut.")
     async def coconut(self, react: discord.Interaction, nombre: values, nsfw: bool, tag: str = ""):
         await self.bot.wait_until_ready()
         await react.response.defer(ephemeral=False)
@@ -68,7 +68,7 @@ class Nekopara(commands.GroupCog, group_name="nekopara"):
         await react.followup.send(embed=result[0], view=result[1])
     
             
-    @app_commands.command(name="maple", description="Affiche une image de Maple.", nsfw=True)
+    @app_commands.command(name="maple", description="Affiche une image de Maple.")
     async def maple(self, react: discord.Interaction, nombre: values, nsfw: bool, tag: str = ""):
         await self.bot.wait_until_ready()
         await react.response.defer(ephemeral=False)
@@ -87,7 +87,7 @@ class Nekopara(commands.GroupCog, group_name="nekopara"):
         await react.followup.send(embed=result[0], view=result[1])
     
             
-    @app_commands.command(name="cinnamon", description="Affiche une image de Cinnamon.", nsfw=True)
+    @app_commands.command(name="cinnamon", description="Affiche une image de Cinnamon.")
     async def cinnamon(self, react: discord.Interaction, nombre: values, nsfw: bool, tag: str = ""):
         await self.bot.wait_until_ready()
         await react.response.defer(ephemeral=False)
@@ -106,7 +106,7 @@ class Nekopara(commands.GroupCog, group_name="nekopara"):
         await react.followup.send(embed=result[0], view=result[1])
             
             
-    @app_commands.command(name="azuki", description="Affiche une image de Azuki.", nsfw=True)
+    @app_commands.command(name="azuki", description="Affiche une image de Azuki.")
     async def azuki(self, react: discord.Interaction, nombre: values, nsfw: bool, tag: str = ""):
         await self.bot.wait_until_ready()
         await react.response.defer(ephemeral=False)

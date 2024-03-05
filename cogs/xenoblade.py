@@ -30,7 +30,7 @@ class Xenoblade(commands.GroupCog, group_name="xenoblade"):
         await react.followup.send(embed=result[0], view=result[1])
             
             
-    @app_commands.command(name="mio", description="Affiche une image de Mio.", nsfw=True)
+    @app_commands.command(name="mio", description="Affiche une image de Mio.")
     async def mio(self, react: discord.Interaction, nombre: values, nsfw:bool, tag: str = ""):
         await self.bot.wait_until_ready()
         await react.response.defer(ephemeral=False)
@@ -49,7 +49,7 @@ class Xenoblade(commands.GroupCog, group_name="xenoblade"):
         await react.followup.send(embed=result[0], view=result[1])
             
             
-    @app_commands.command(name="nael", description="Affiche une image de Na'el.", nsfw=True)
+    @app_commands.command(name="nael", description="Affiche une image de Na'el.")
     async def nael(self, react: discord.Interaction, nombre: values, nsfw: bool, tag: str = ""):
         await self.bot.wait_until_ready()
         await react.response.defer(ephemeral=False)
