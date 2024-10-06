@@ -1,7 +1,7 @@
 from typing import Literal
 
-version = "2.6.3"
-online_message = "Nya Nya Nya mais genre 2.0 !"
+version = "2.7.0"
+online_message = "Featuring Azu-nyan !"
 
 # Dictionnaire qui stocke les cogs chargés
 loaded_ext = []
