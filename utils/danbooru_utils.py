@@ -97,7 +97,7 @@ class Image_Viewer():
         
         select_menu = Select(placeholder="Choisis une image", max_values=1, min_values=1, options=self.current_list)
         web_button = Button(label="Lien vers l'image", style=ButtonStyle.link, url=self.curlink)
-        quit_button = Button(label="Fermer", style=ButtonStyle.danger, emoji="<:disconnect_icon:1148310144703279134>")
+        quit_button = Button(label="Fermer", style=ButtonStyle.danger, emoji="❌")
                 
         async def menu_callback(react: discord.Interaction) -> None:
             await react.response.defer(thinking=False)
